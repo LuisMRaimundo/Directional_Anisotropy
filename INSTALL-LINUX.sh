@@ -16,7 +16,7 @@ echo "  set up the app, and open it in your web browser."
 echo ""
 read -r -p "Press Enter to continue... " _
 
-bash "install/linux/install.sh" || {
+bash "instalers/linux/install.sh" || {
   echo ""
   echo "  Installation failed. See messages above."
   read -r -p "Press Enter to close... " _

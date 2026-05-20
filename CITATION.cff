@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "Anisotropia Direcional"
+message: "If you refer to this software or its methodology, cite it as below. No licence for reuse is granted by this citation file."
+type: software
+authors:
+  - family-names: "Raimundo"
+    given-names: "Luís"
+version: "2.4.0"
+date-released: "2026-05-20"
+repository-code: "https://github.com/LuisMRaimundo/Music_xml_anisotropy"
+url: "https://github.com/LuisMRaimundo/Music_xml_anisotropy"
+abstract: "Systematic notational directional-field analyzer for symbolic MusicXML: drift, tortuosity, structure-tensor anisotropy, circular coherence, and directional conflict on pitch–time transitions. Not audio, perception, harmony, or general texture analysis."
+keywords:
+  - musicxml
+  - music notation
+  - melodic contour
+  - structure tensor
+  - computational musicology
+license: "NOASSERTION"

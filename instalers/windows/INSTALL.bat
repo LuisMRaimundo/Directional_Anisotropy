@@ -1,6 +1,6 @@
 @echo off
 title Anisotropia Direcional - Install (Windows)
-cd /d "%~dp0"
+cd /d "%~dp0\..\.."
 
 echo.
 echo  ========================================
@@ -13,7 +13,7 @@ echo  and open it in your web browser.
 echo.
 pause
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0instalers\windows\Install-Anisotropia.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Install-Anisotropia.ps1"
 if errorlevel 1 (
     echo.
     echo  Installation failed. Read the messages above.

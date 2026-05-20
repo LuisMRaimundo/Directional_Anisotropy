@@ -16,7 +16,7 @@ echo "  and open it in your web browser."
 echo ""
 read -r -p "Press Enter to continue... " _
 
-bash "install/macos/install.sh" || {
+bash "instalers/mac/install.sh" || {
   echo ""
   echo "  Installation failed. See messages above."
   read -r -p "Press Enter to close... " _

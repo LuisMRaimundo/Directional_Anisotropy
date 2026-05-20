@@ -6,6 +6,9 @@ Anisotropia Direcional measures **notational directionality** in pitch–time tr
 
 **It is not:** audio analysis, a perception model, harmonic or Schenkerian analysis, orchestration density, or general texture analysis. The structure-tensor analogy applies to **discrete notational data**, not waveforms or images.
 
+**Package version:** 2.4.0 (`anisotropia/__init__.py`)  
+**Python:** ≥ 3.10
+
 **Estrutura:** `anisotropia/` (parsing, metrics, transitions, **pipeline**, sensitivity) + `Anisotropia.py` (Streamlit UI).
 
 **CI:** GitHub Actions — tests (138), coverage ≥78% (~85%), frozen corpus comparison, **ruff** (blocking) — see `.github/workflows/tests.yml`.
@@ -34,11 +37,11 @@ Download or clone the project, then use **one file** for your system:
 
 | System | First-time install | Later (already installed) |
 |--------|--------------------|---------------------------|
-| **Windows 10/11** | Double-click **`INSTALL-WINDOWS.bat`** | **`START-Anisotropia.bat`** |
+| **Windows 10/11** | Double-click **`instalers/windows/INSTALL.bat`** (or **`INSTALL-WINDOWS.bat`** at repo root) | **`START-Anisotropia.bat`** |
 | **macOS** | Double-click **`INSTALL-MAC.command`** | **`START-Anisotropia.command`** |
-| **Linux** | Run **`bash INSTALL-LINUX.sh`** (or make executable and double-click) | **`./START-Anisotropia.sh`** |
+| **Linux** | **`bash instalers/linux/install-easy.sh`** (or **`INSTALL-LINUX.sh`**) | **`./START-Anisotropia.sh`** |
 
-The installer will install Python 3.10+ if needed, create `.venv/`, install dependencies, and open the app in your browser. Details: [`install/README.md`](install/README.md).
+The installer will install Python 3.10+ if needed, create `.venv/`, install dependencies, and open the app in your browser. Details: [`instalers/README.md`](instalers/README.md).
 
 ## Streamlit UI (manual / developers)
 
@@ -84,6 +87,31 @@ python corpus/scripts/reproduce_tables.py
 | **μ** | Principal orientation (radians) |
 | **R** | Angular coherence |
 
-## License
+## Legal and citation
 
-Use freely for research and education.
+| File | Purpose |
+|------|---------|
+| **[NOTICE.md](NOTICE.md)** | Copyright and use terms (proprietary; no open-source licence granted). |
+| **[CITATION.cff](CITATION.cff)** | Citation metadata for software recognition. |
+
+## Installers (optional)
+
+**Repository:** https://github.com/LuisMRaimundo/Music_xml_anisotropy
+
+End users without Python: see **[`instalers/`](instalers/)** — especially on Windows, double-click **`instalers/windows/INSTALL.bat`** (installs Python if needed, sets up `.venv`, installs libraries, launches the app).
+
+| Folder | Standard install | Portable build (PyInstaller) |
+|--------|------------------|------------------------------|
+| [`instalers/windows/`](instalers/windows/) | **`INSTALL.bat`** | *Not in git* |
+| [`instalers/mac/`](instalers/mac/) | `install-easy.sh` / `install.sh` | *Not in git* |
+| [`instalers/linux/`](instalers/linux/) | `install-easy.sh` / `install.sh` | *Not in git* |
+
+Built `.exe` / `.app` / `.dmg` / `.tar.gz` files are **not** in git — use [GitHub Releases](https://github.com/LuisMRaimundo/Music_xml_anisotropy/releases) if you distribute frozen builds.
+
+## Acknowledgements
+
+This project was developed by **Luís Raimundo** with the support and funding of the **Fundação para a Ciência e a Tecnologia (FCT)** and **Universidade NOVA de Lisboa**.
+
+**Funding DOI:** [https://doi.org/10.54499/2020.08817.BD](https://doi.org/10.54499/2020.08817.BD)
+
+The author also gratefully acknowledges **Isabel Pires** for her support throughout the development of this work.
