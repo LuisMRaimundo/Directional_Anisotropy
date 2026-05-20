@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["anisotropia"]
+omit = ["anisotropia/visualizations.py"]
+
+[tool.coverage.report]
+fail_under = 78
+show_missing = true

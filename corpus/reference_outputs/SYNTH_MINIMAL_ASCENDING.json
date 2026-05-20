@@ -1,0 +1,60 @@
+{
+  "config": {
+    "bootstrap_ci": false,
+    "chord_rep": "centroid",
+    "chord_simultaneity": "coincident",
+    "compute_2a": true,
+    "compute_2b": true,
+    "epsilon_dt": 1e-09,
+    "expand_chord_pitches": true,
+    "expand_repeats": false,
+    "grace_policy": "exclude",
+    "include_vertical_auxiliary": true,
+    "legacy_mixed_mode": false,
+    "merge_grand_staff": true,
+    "merge_tied_notes": true,
+    "pitch_space": "sounding",
+    "split_voices": false,
+    "standardization_mode": "local_zscore",
+    "step": 2.0,
+    "unpitched_policy": "map_display",
+    "weight_mode": "dur",
+    "window_mode": "total",
+    "window_size": 4.0
+  },
+  "corpus_id": "SYNTH_MINIMAL_ASCENDING",
+  "corpus_status": "synthetic_fixture",
+  "file_path": "tests/fixtures/minimal_score.xml",
+  "include_in_official_benchmark": false,
+  "input_sha256": "c2aa8a2b22160c918d9acd3d50ee2ab223f2c3cf92c9d63498b5d4b9a2489dd3",
+  "metric_schema_version": "1.0.0",
+  "metrics_2a": {
+    "A_tensor": 1.0,
+    "D": 1.0,
+    "R": 0.9885305138999705,
+    "mu": 1.5707963267948966,
+    "n": 3,
+    "tau": 0.0
+  },
+  "metrics_2b": {
+    "A_tensor": 1.0,
+    "D": 1.0,
+    "R": 0.9885305138999705,
+    "mu": 1.5707963267948966,
+    "n": 3,
+    "tau": 0.0
+  },
+  "software_version": "2.3.0",
+  "summary_counts": {
+    "cross_voice_chaining_in_main_field": false,
+    "main_field_horizontal_only": true,
+    "n_horizontal_transitions_total": 3,
+    "n_note_events_total": 4,
+    "n_reference_part_horizontal": 3,
+    "n_vertical_auxiliary_total": 0,
+    "per_voice_chain_construction": true,
+    "split_by_voice_output_aggregation": false,
+    "vertical_auxiliary_built": true,
+    "voice_aware_transition_construction": true
+  }
+}

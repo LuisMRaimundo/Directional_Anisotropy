@@ -1,0 +1,65 @@
+{
+  "rubric_version": "1.0.0",
+  "tool_identity": "systematic notational directional-field analyzer",
+  "scope": "symbolic MusicXML pitch-time transitions only",
+  "excludes": [
+    "audio",
+    "perception",
+    "harmony",
+    "tonal_function",
+    "schenkerian",
+    "orchestration_density",
+    "general_texture"
+  ],
+  "total_points": 100,
+  "dimensions": [
+    {
+      "id": "scope_terminology",
+      "name": "Scientific scope and terminology discipline",
+      "max_points": 10
+    },
+    {
+      "id": "metric_correctness",
+      "name": "Formal metric correctness and documentation",
+      "max_points": 15
+    },
+    {
+      "id": "parsing_ontology",
+      "name": "Transition ontology and parsing robustness",
+      "max_points": 15
+    },
+    {
+      "id": "corpus_benchmark",
+      "name": "Benchmark corpus and frozen outputs",
+      "max_points": 20
+    },
+    {
+      "id": "programmatic_core",
+      "name": "Programmatic core architecture",
+      "max_points": 15
+    },
+    {
+      "id": "testing_ci",
+      "name": "Testing, CI, and quality gates",
+      "max_points": 10
+    },
+    {
+      "id": "sensitivity",
+      "name": "Parameter transparency and sensitivity",
+      "max_points": 10
+    },
+    {
+      "id": "reproducibility",
+      "name": "Reporting and export reproducibility",
+      "max_points": 5
+    }
+  ],
+  "bands": [
+    {"min": 0, "max": 59, "label": "prototype_exploratory"},
+    {"min": 60, "max": 74, "label": "useful_internal_research"},
+    {"min": 75, "max": 84, "label": "strong_with_gaps"},
+    {"min": 85, "max": 89, "label": "near_publication_grade"},
+    {"min": 90, "max": 94, "label": "publication_grade_systematic_notational"},
+    {"min": 95, "max": 100, "label": "field_reference"}
+  ]
+}

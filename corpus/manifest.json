@@ -1,0 +1,55 @@
+{
+  "manifest_version": "1.0.0",
+  "description": "Symbolic MusicXML benchmark manifest for Anisotropia Direcional. Synthetic fixtures only in this release.",
+  "official_representative_corpus_exists": false,
+  "entries": [
+    {
+      "corpus_id": "SYNTH_MINIMAL_ASCENDING",
+      "file_path": "tests/fixtures/minimal_score.xml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "composer": "synthetic",
+      "work_title": "Minimal ascending quarter-note line",
+      "excerpt_label": "smoke_reference",
+      "instrumentation": "single part, monophonic",
+      "measure_range": "1",
+      "source": "repository test fixture",
+      "license_status": "repository_internal",
+      "license_note": "Authored for regression tests; not a representative repertoire sample.",
+      "limitations": "Four ascending diatonic steps; behavioural smoke only.",
+      "include_in_official_benchmark": false
+    },
+    {
+      "corpus_id": "SYNTH_MINIMAL_TWO_PARTS",
+      "file_path": "tests/fixtures/minimal_two_parts.xml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "composer": "synthetic",
+      "work_title": "Minimal two-part excerpt",
+      "excerpt_label": "conflict_smoke",
+      "instrumentation": "two parts",
+      "measure_range": "unknown",
+      "source": "repository test fixture",
+      "license_status": "repository_internal",
+      "license_note": "Authored for regression tests.",
+      "limitations": "Small synthetic score for multi-part and conflict metrics.",
+      "include_in_official_benchmark": false
+    },
+    {
+      "corpus_id": "SYNTH_GRAND_STAFF_TWO_PARTS",
+      "file_path": "tests/fixtures/grand_staff_two_parts.xml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "composer": "synthetic",
+      "work_title": "Grand staff merge smoke",
+      "excerpt_label": "grand_staff_smoke",
+      "instrumentation": "grand staff pattern",
+      "measure_range": "unknown",
+      "source": "repository test fixture",
+      "license_status": "repository_internal",
+      "license_note": "Authored for parsing regression.",
+      "limitations": "Tests merge_grand_staff parsing only; too few horizontal transitions for frozen metric benchmark under default ontology.",
+      "include_in_official_benchmark": false
+    }
+  ]
+}

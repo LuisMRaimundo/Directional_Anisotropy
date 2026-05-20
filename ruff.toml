@@ -1,0 +1,11 @@
+# Gradual lint adoption — see docs/anisotropia_current_rating.md
+target-version = "py310"
+line-length = 120
+
+[lint]
+select = ["E", "F", "W"]
+ignore = ["E501"]
+
+[lint.per-file-ignores]
+"Anisotropia.py" = ["E402", "F401"]
+"anisotropia/__init__.py" = ["E402"]
