@@ -22,6 +22,7 @@
 | `docs/anisotropia_*.md`, `STREAMLIT_*.md`, `benchmark_intake.md` | docs | README | Rating, rubric, migration |
 | `anisotropia/references.py` | module | `report.py` | Canonical bibliography |
 | `run.bat` | script | user launcher | Streamlit entry |
+| `installers/**` | scripts | README, `INSTALL-*.bat/sh/command` | One-click setup (Windows/macOS/Linux) |
 | `.github/workflows/tests.yml` | CI | push/PR | tests + coverage + corpus + ruff |
 
 ---

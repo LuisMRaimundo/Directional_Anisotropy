@@ -36,8 +36,8 @@ def test_invalid_mxl_zip_raises():
 
 def test_grace_exclude_vs_include():
     xml = (FIXTURES / "minimal_score.xml").read_bytes()
-    ev_ex, _ = parse_musicxml(xml, "m.xml", grace_policy="exclude")
-    ev_in, _ = parse_musicxml(xml, "m.xml", grace_policy="include")
+    ev_ex, _, _ = parse_musicxml(xml, "m.xml", grace_policy="exclude")
+    ev_in, _, _ = parse_musicxml(xml, "m.xml", grace_policy="include")
     assert sum(len(v) for v in ev_ex.values()) <= sum(len(v) for v in ev_in.values())
 
 
@@ -60,10 +60,10 @@ def test_chord_rep_top_bottom_centroid():
 
 def test_coincident_vs_stagger_chord_timing():
     xml = (FIXTURES / "minimal_score.xml").read_bytes()
-    ev_c, hs = parse_musicxml(
+    ev_c, hs, _ = parse_musicxml(
         xml, "m.xml", expand_chord_pitches=True, chord_simultaneity="coincident"
     )
-    ev_s, _ = parse_musicxml(
+    ev_s, _, _ = parse_musicxml(
         xml, "m.xml", expand_chord_pitches=True, chord_simultaneity="stagger"
     )
     assert ev_c == ev_s or True
@@ -71,21 +71,21 @@ def test_coincident_vs_stagger_chord_timing():
 
 def test_written_pitch_space():
     xml = (FIXTURES / "minimal_score.xml").read_bytes()
-    ev, _ = parse_musicxml(xml, "m.xml", pitch_space="written")
+    ev, _, _ = parse_musicxml(xml, "m.xml", pitch_space="written")
     assert sum(len(v) for v in ev.values()) >= 4
 
 
 def test_unpitched_exclude():
     xml = (FIXTURES / "minimal_score.xml").read_bytes()
-    ev_map, _ = parse_musicxml(xml, "m.xml", unpitched_policy="map_display")
-    ev_ex, _ = parse_musicxml(xml, "m.xml", unpitched_policy="exclude")
+    ev_map, _, _ = parse_musicxml(xml, "m.xml", unpitched_policy="map_display")
+    ev_ex, _, _ = parse_musicxml(xml, "m.xml", unpitched_policy="exclude")
     assert sum(len(v) for v in ev_map.values()) >= sum(len(v) for v in ev_ex.values())
 
 
 def test_merge_grand_staff_combines_staves():
     xml = (FIXTURES / "grand_staff_two_parts.xml").read_bytes()
-    merged, _ = parse_musicxml(xml, "g.xml", merge_grand_staff=True)
-    separate, _ = parse_musicxml(xml, "g.xml", merge_grand_staff=False)
+    merged, _, _ = parse_musicxml(xml, "g.xml", merge_grand_staff=True)
+    separate, _, _ = parse_musicxml(xml, "g.xml", merge_grand_staff=False)
     assert len(merged) <= len(separate)
 
 
@@ -112,7 +112,7 @@ def test_all_weights_zero_fallback_in_metrics():
 
 def test_legacy_mixed_mode_stagger_path():
     xml = (FIXTURES / "minimal_score.xml").read_bytes()
-    ev, hs = parse_musicxml(xml, "m.xml", chord_simultaneity="stagger", expand_chord_pitches=True)
+    ev, hs, _ = parse_musicxml(xml, "m.xml", chord_simultaneity="stagger", expand_chord_pitches=True)
     evs = list(ev.values())[0]
     tb = build_directional_transition_tables(
         evs, legacy_mixed_mode=True, epsilon_dt=1e-9, has_seconds=hs

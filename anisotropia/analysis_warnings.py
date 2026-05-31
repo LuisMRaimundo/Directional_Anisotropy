@@ -124,6 +124,19 @@ def collect_low_n_warnings(
     return warnings
 
 
+def collect_parse_warnings(parse_warnings: Optional[List[str]] = None) -> List[AnalysisWarning]:
+    """Warnings from MusicXML parse (sounding pitch / repeat expansion fallbacks)."""
+    out: List[AnalysisWarning] = []
+    for msg in parse_warnings or []:
+        wtype = "parse"
+        if "toSoundingPitch" in msg:
+            wtype = "sounding_pitch_fallback"
+        elif "expandRepeats" in msg:
+            wtype = "expand_repeats_fallback"
+        out.append(AnalysisWarning(warning_type=wtype, message=msg))
+    return out
+
+
 def collect_bootstrap_unavailable_warnings(
     df_results: pd.DataFrame,
     bootstrap_ci: bool,
@@ -162,9 +175,11 @@ def collect_all_analysis_warnings(
     summary_counts: Dict[str, Any],
     unpitched_policy: str,
     bootstrap_ci: bool,
+    parse_warnings: Optional[List[str]] = None,
     extra_messages: Optional[List[str]] = None,
 ) -> List[AnalysisWarning]:
     warnings: List[AnalysisWarning] = []
+    warnings.extend(collect_parse_warnings(parse_warnings))
     warnings.extend(collect_unpitched_display_warnings(events_by_part, unpitched_policy))
     warnings.extend(collect_low_n_warnings(df_results, ontology_meta, summary_counts))
     warnings.extend(collect_bootstrap_unavailable_warnings(df_results, bootstrap_ci))

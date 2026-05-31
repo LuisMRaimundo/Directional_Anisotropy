@@ -151,7 +151,7 @@ def run_analysis(
             "standardization_mode global_zscore: alias of local_zscore per metric window (not corpus-global)."
         )
 
-    events_by_part, has_seconds = parse_musicxml(
+    events_by_part, has_seconds, parse_warnings = parse_musicxml(
         xml_bytes,
         filename,
         chord_rep=cfg.chord_rep,
@@ -289,6 +289,7 @@ def run_analysis(
         summary_counts=summary_counts,
         unpitched_policy=cfg.unpitched_policy,
         bootstrap_ci=cfg.bootstrap_ci,
+        parse_warnings=parse_warnings,
         extra_messages=warn_list,
     )
     warn_list = warnings_as_strings(structured_warnings)

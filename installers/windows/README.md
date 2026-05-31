@@ -1,11 +1,11 @@
 # Anisotropia Direcional - Windows installation
 
-**Repository:** https://github.com/LuisMRaimundo/Music_xml_anisotropy
+**Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
 
 ## Standard installation (no Python required)
 
 1. Download a **fresh** ZIP from GitHub (**Code -> Download ZIP**) or clone the repo.
-2. Open **`instalers\windows`**.
+2. Open **`installers\windows`**.
 3. Double-click **`INSTALL.bat`** or **`START-HERE.bat`**.
 4. Wait for **SUCCESS** or **Done** (first run: **5-15 minutes**).
 5. The app opens in your browser (Streamlit).

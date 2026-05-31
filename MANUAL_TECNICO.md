@@ -75,8 +75,9 @@ O sistema mede **anisotropia notacional** (campo direccional notacional sistemá
 
 ```
 MusicXML (bytes)
-    → parse_musicxml  →  Dict[parte, List[Event]]
-         • opcional: toSoundingPitch() se pitch_space="sounding"
+    → parse_musicxml  →  (Dict[parte, List[Event]], has_seconds, parse_warnings)
+         • opcional: toSoundingPitch() se pitch_space="sounding" (falha → aviso + pitch written)
+         • opcional: expandRepeats() se expand_repeats=True (falha → aviso + partitura não expandida)
          • ids de <score-part> lidos do XML bruto para fundir grand staff (merge_grand_staff)
     → build_directional_transition_tables (transitions.py)  →  DataFrame horizontal (+ opcional vertical) por parte
          • modo predefinido: sucessão melódica por **voz** MusicXML, com colapso de simultaneidades no mesmo (voz, ql)
@@ -91,7 +92,7 @@ MusicXML (bytes)
 
 A **parte referência** para construir a lista de janelas é a parte com **mais transições** (no conjunto **horizontal**); as outras partes são cortadas às **mesmas** janelas (por medida, tempo ou índice de transição conforme o modo).
 
-**Parsing (`parse_musicxml`):** parâmetros relevantes incluem `grace_policy` (`exclude` predefinido se não se passar outro), `pitch_space` (`sounding` \| `written`), `unpitched_policy` (`map_display` \| `exclude`), `chord_simultaneity` (`coincident` \| `stagger`), `expand_chord_pitches`, `split_voices`, `merge_tied_notes`, `merge_grand_staff`. O campo `exclude_grace` (bool) continua aceite e sobrepõe a política de grace quando fornecido (compatibilidade).
+**Parsing (`parse_musicxml`):** devolve uma tripla `(events_by_part, has_seconds, parse_warnings)`. Parâmetros relevantes: `grace_policy` (`exclude` predefinido se não se passar outro), `pitch_space` (`sounding` \| `written`), `expand_repeats`, `unpitched_policy` (`map_display` \| `exclude`), `chord_simultaneity` (`coincident` \| `stagger`), `expand_chord_pitches`, `split_voices`, `merge_tied_notes`, `merge_grand_staff`. Se `toSoundingPitch()` ou `expandRepeats()` falharem, as listas de avisos incluem mensagens explícitas (tipos `sounding_pitch_fallback` e `expand_repeats_fallback` em `analysis_warnings.py`); o pipeline propaga-as para relatório e exportação. O campo `exclude_grace` (bool) continua aceite e sobrepõe a política de grace quando fornecido (compatibilidade).
 
 ### 2.1 Relatório e metadados de exportação
 
@@ -503,7 +504,7 @@ for w in result.warnings:
     print("warning:", w)
 ```
 
-Inclui avisos automáticos (baixo **n**, unpitched com proxy de display-pitch, etc.) e metadados de reprodutibilidade (`input_sha256`, `config_sha256`). `grace_policy="include_attached"` **não** está implementado (erro explícito).
+Inclui avisos automáticos (baixo **n**, unpitched com proxy de display-pitch, falha de transposição sounding ou expansão de repetições no parse, etc.) e metadados de reprodutibilidade (`input_sha256`, `config_sha256`). `grace_policy="include_attached"` **não** está implementado (erro explícito).
 
 ### 12.4 Uso programático de baixo nível (módulos)
 
@@ -515,7 +516,9 @@ from anisotropia.metrics import compute_metrics_from_transitions
 from anisotropia.windowing import window_slices_for_part
 
 xml_bytes = Path("ficheiro.xml").read_bytes()
-events_by_part, has_seconds = parse_musicxml(xml_bytes, "ficheiro.xml", chord_rep="centroid")
+events_by_part, has_seconds, parse_warnings = parse_musicxml(
+    xml_bytes, "ficheiro.xml", chord_rep="centroid"
+)
 
 # Parte com mais transições como referência para janelas (campo horizontal)
 def transitions_map(ebp):

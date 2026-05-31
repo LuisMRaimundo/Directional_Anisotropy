@@ -22,7 +22,7 @@ def test_reference_corpus_minimal_score():
     if not xml_path.exists():
         pytest.skip("minimal_score.xml não encontrado")
     xml_bytes = xml_path.read_bytes()
-    events_by_part, _ = parse_musicxml(xml_bytes, "minimal.xml")
+    events_by_part, _, _ = parse_musicxml(xml_bytes, "minimal.xml")
     trans_by_part = {
         part: transitions_from_events(evs)
         for part, evs in events_by_part.items()

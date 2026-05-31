@@ -14,7 +14,7 @@ echo   Anisotropia Direcional
 echo   One-click install for Windows 10/11
 echo  ========================================
 echo.
-echo  GitHub: https://github.com/LuisMRaimundo/Music_xml_anisotropy
+echo  GitHub: https://github.com/LuisMRaimundo/Music_anisotropy
 echo.
 echo  This installs Python if needed, sets up the app,
 echo  and opens it in your web browser.

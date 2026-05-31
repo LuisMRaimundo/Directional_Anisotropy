@@ -31,7 +31,7 @@
 ## Consolidation patch (2.4.0) highlights
 
 - **Deterministic `config_sha256`** from effective analysis parameters (`reproducibility.py`)
-- **Automatic warnings:** low-n (`N_MIN_STABLE`), unpitched display-pitch proxy, bootstrap n
+- **Automatic warnings:** low-n (`N_MIN_STABLE`), unpitched display-pitch proxy, parse fallbacks (`sounding_pitch_fallback`, `expand_repeats_fallback`), bootstrap n
 - **Streamlit → `run_analysis()`** for core metrics (no formula changes)
 - **`grace_policy=include_attached`:** not selectable; raises `GracePolicyNotImplementedError`
 - **Ruff** cleanup; CI lint step blocking

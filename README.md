@@ -37,11 +37,11 @@ Download or clone the project, then use **one file** for your system:
 
 | System | First-time install | Later (already installed) |
 |--------|--------------------|---------------------------|
-| **Windows 10/11** | Double-click **`instalers/windows/INSTALL.bat`** (or **`INSTALL-WINDOWS.bat`** at repo root) | **`START-Anisotropia.bat`** |
+| **Windows 10/11** | Double-click **`installers/windows/INSTALL.bat`** (or **`INSTALL-WINDOWS.bat`** at repo root) | **`START-Anisotropia.bat`** |
 | **macOS** | Double-click **`INSTALL-MAC.command`** | **`START-Anisotropia.command`** |
-| **Linux** | **`bash instalers/linux/install-easy.sh`** (or **`INSTALL-LINUX.sh`**) | **`./START-Anisotropia.sh`** |
+| **Linux** | **`bash installers/linux/install-easy.sh`** (or **`INSTALL-LINUX.sh`**) | **`./START-Anisotropia.sh`** |
 
-The installer will install Python 3.10+ if needed, create `.venv/`, install dependencies, and open the app in your browser. Details: [`instalers/README.md`](instalers/README.md).
+The installer will install Python 3.10+ if needed, create `.venv/`, install dependencies, and open the app in your browser. Details: [`installers/README.md`](installers/README.md).
 
 ## Streamlit UI (manual / developers)
 
@@ -73,7 +73,7 @@ python corpus/scripts/reproduce_tables.py
 - `global_zscore` is currently an **alias** of `local_zscore` (not corpus-global).
 - `grace_policy=include_attached` is **not implemented** (not in UI; programmatic use raises `NotImplementedError`).
 - **`config_sha256`** is computed for every analysis (deterministic effective-config hash).
-- Automatic **low-n** and **unpitched display-pitch proxy** warnings in reports/exports.
+- Automatic **low-n**, **unpitched display-pitch proxy**, and **parse fallback** warnings (failed `toSoundingPitch` / `expandRepeats`) in reports/exports.
 - Bootstrap resamples **transitions**, not hierarchical score units.
 - Representative benchmark corpus: **0 official** entries (`include_in_official_benchmark: true`); synthetic fixtures only — primary **90+** blocker.
 
@@ -96,17 +96,17 @@ python corpus/scripts/reproduce_tables.py
 
 ## Installers (optional)
 
-**Repository:** https://github.com/LuisMRaimundo/Music_xml_anisotropy
+**Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
 
-End users without Python: see **[`instalers/`](instalers/)** — especially on Windows, double-click **`instalers/windows/INSTALL.bat`** (installs Python if needed, sets up `.venv`, installs libraries, launches the app).
+End users without Python: see **[`installers/`](installers/)** — especially on Windows, double-click **`installers/windows/INSTALL.bat`** (installs Python if needed, sets up `.venv`, installs libraries, launches the app).
 
 | Folder | Standard install | Portable build (PyInstaller) |
 |--------|------------------|------------------------------|
-| [`instalers/windows/`](instalers/windows/) | **`INSTALL.bat`** | *Not in git* |
-| [`instalers/mac/`](instalers/mac/) | `install-easy.sh` / `install.sh` | *Not in git* |
-| [`instalers/linux/`](instalers/linux/) | `install-easy.sh` / `install.sh` | *Not in git* |
+| [`installers/windows/`](installers/windows/) | **`INSTALL.bat`** | *Not in git* |
+| [`installers/mac/`](installers/mac/) | `install-easy.sh` / `install.sh` | *Not in git* |
+| [`installers/linux/`](installers/linux/) | `install-easy.sh` / `install.sh` | *Not in git* |
 
-Built `.exe` / `.app` / `.dmg` / `.tar.gz` files are **not** in git — use [GitHub Releases](https://github.com/LuisMRaimundo/Music_xml_anisotropy/releases) if you distribute frozen builds.
+Built `.exe` / `.app` / `.dmg` / `.tar.gz` files are **not** in git — use [GitHub Releases](https://github.com/LuisMRaimundo/Music_anisotropy/releases) if you distribute frozen builds.
 
 ## Acknowledgements
 

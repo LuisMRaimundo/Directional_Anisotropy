@@ -22,7 +22,10 @@ def test_parse_musicxml_minimal():
     if not xml_path.exists():
         pytest.skip("minimal_score.xml não encontrado")
     xml_bytes = xml_path.read_bytes()
-    events_by_part, has_seconds = parse_musicxml(xml_bytes, "minimal.xml", chord_rep="centroid")
+    events_by_part, has_seconds, parse_warns = parse_musicxml(
+        xml_bytes, "minimal.xml", chord_rep="centroid"
+    )
+    assert not parse_warns
     assert len(events_by_part) >= 1
     part_name = list(events_by_part.keys())[0]
     evs = events_by_part[part_name]
@@ -102,7 +105,7 @@ def test_parse_musicxml_expand_chord_yields_one_event_per_pitch():
     sc.insert(0, p)
     tmp_path = sc.write("musicxml")
     data = Path(tmp_path).read_bytes()
-    evs_by_part, _ = parse_musicxml(
+    evs_by_part, _, _ = parse_musicxml(
         data, "chord.xml", expand_chord_pitches=True, chord_simultaneity="stagger",
     )
     evs = list(evs_by_part.values())[0]
@@ -130,7 +133,7 @@ def test_parse_musicxml_includes_unpitched_events():
     sc.insert(0, p)
     tmp_path = sc.write("musicxml")
     data = Path(tmp_path).read_bytes()
-    evs_by_part, _ = parse_musicxml(data, "unpitched.xml")
+    evs_by_part, _, _ = parse_musicxml(data, "unpitched.xml")
     evs = list(evs_by_part.values())[0]
     assert len(evs) == 2
     assert evs[0].p < evs[1].p
@@ -153,7 +156,7 @@ def test_parse_musicxml_ties_merged_to_one_onset_chain():
     sc.insert(0, p)
     tmp_path = sc.write("musicxml")
     data = Path(tmp_path).read_bytes()
-    evs_by_part, _ = parse_musicxml(data, "tied.xml")
+    evs_by_part, _, _ = parse_musicxml(data, "tied.xml")
     evs = list(evs_by_part.values())[0]
     assert len(evs) == 1
     assert evs[0].p == 60.0
@@ -174,7 +177,7 @@ def test_parse_musicxml_multi_measure_ordering():
     sc.insert(0, p)
     tmp_path = sc.write("musicxml")
     data = Path(tmp_path).read_bytes()
-    evs_by_part, _ = parse_musicxml(data, "multi_measure.xml")
+    evs_by_part, _, _ = parse_musicxml(data, "multi_measure.xml")
     evs = list(evs_by_part.values())[0]
     qls = [e.ql for e in evs]
     # Ordem correta: C4(0), D4(1), E4(2)
@@ -200,8 +203,8 @@ def test_parse_musicxml_merge_tied_notes_false_keeps_tie_heads():
     sc.insert(0, p)
     tmp_path = sc.write("musicxml")
     data = Path(tmp_path).read_bytes()
-    merged, _ = parse_musicxml(data, "tied2.xml", merge_tied_notes=True)
-    split, _ = parse_musicxml(data, "tied2.xml", merge_tied_notes=False)
+    merged, _, _ = parse_musicxml(data, "tied2.xml", merge_tied_notes=True)
+    split, _, _ = parse_musicxml(data, "tied2.xml", merge_tied_notes=False)
     assert len(list(merged.values())[0]) == 1
     assert len(list(split.values())[0]) == 2
 
@@ -213,16 +216,37 @@ def test_parse_musicxml_merge_grand_staff_two_staves_one_instrument():
         pytest.skip("grand_staff_two_parts.xml não encontrado")
     data = xml_path.read_bytes()
 
-    merged, _ = parse_musicxml(data, "grand_staff_two_parts.xml", merge_grand_staff=True)
+    merged, _, _ = parse_musicxml(data, "grand_staff_two_parts.xml", merge_grand_staff=True)
     assert len(merged) == 1
     assert "Piano (P1)" in merged
     evs = merged["Piano (P1)"]
     assert len(evs) == 2
     assert sorted(e.p for e in evs) == [55.0, 60.0]
 
-    split, _ = parse_musicxml(data, "grand_staff_two_parts.xml", merge_grand_staff=False)
+    split, _, _ = parse_musicxml(data, "grand_staff_two_parts.xml", merge_grand_staff=False)
     assert len(split) == 2
     assert sum(len(v) for v in split.values()) == 2
+
+
+def test_parse_musicxml_sounding_pitch_failure_returns_warning(monkeypatch):
+    from music21 import converter
+
+    xml_bytes = (Path(__file__).parent / "fixtures" / "minimal_score.xml").read_bytes()
+    original_parse = converter.parse
+
+    def fake_parse(path):
+        sc = original_parse(path)
+
+        def fail(*_a, **_k):
+            raise RuntimeError("mock transpose failure")
+
+        sc.toSoundingPitch = fail
+        return sc
+
+    monkeypatch.setattr(converter, "parse", fake_parse)
+    _, _, warns = parse_musicxml(xml_bytes, "minimal.xml", pitch_space="sounding")
+    assert len(warns) == 1
+    assert "toSoundingPitch" in warns[0]
 
 
 def test_parse_musicxml_expand_repeats_smoke():
@@ -231,7 +255,7 @@ def test_parse_musicxml_expand_repeats_smoke():
     if not xml_path.exists():
         pytest.skip("minimal_score.xml não encontrado")
     xml_bytes = xml_path.read_bytes()
-    a, _ = parse_musicxml(xml_bytes, "minimal.xml", expand_repeats=False)
-    b, _ = parse_musicxml(xml_bytes, "minimal.xml", expand_repeats=True)
+    a, _, _ = parse_musicxml(xml_bytes, "minimal.xml", expand_repeats=False)
+    b, _, _ = parse_musicxml(xml_bytes, "minimal.xml", expand_repeats=True)
     assert sum(len(v) for v in a.values()) == sum(len(v) for v in b.values())
 

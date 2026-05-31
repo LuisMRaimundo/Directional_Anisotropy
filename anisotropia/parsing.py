@@ -250,7 +250,7 @@ def parse_musicxml(
     merge_grand_staff: bool = True,
     pitch_space: str = "sounding",
     unpitched_policy: str = "map_display",
-) -> Tuple[Dict[str, List[Event]], bool]:
+) -> Tuple[Dict[str, List[Event]], bool, List[str]]:
     """
     Parse MusicXML into onset events per part (or per part+voice if ``split_voices``).
 
@@ -275,7 +275,10 @@ def parse_musicxml(
     or ``include_attached`` (currently treated as ``exclude``; full attachment not implemented).
 
     **pitch_space:** ``sounding`` (default, cross-instrument comparison) or ``written``.
-    Applies ``Score.toSoundingPitch()`` when ``sounding``.
+    Applies ``Score.toSoundingPitch()`` when ``sounding``. On failure, written pitch is
+    used and a warning string is returned (third tuple element).
+
+    **Returns:** ``(events_by_part, has_seconds, parse_warnings)``.
 
     **unpitched_policy:** ``map_display`` (default, staff position as MIDI proxy) or
     ``exclude`` (skip unpitched elements).
@@ -313,11 +316,16 @@ def parse_musicxml(
         with open(tmp_path, "wb") as f:
             f.write(file_bytes)
         sc = converter.parse(tmp_path)
+    parse_warnings: List[str] = []
     if pitch_space == "sounding":
         try:
             sc.toSoundingPitch(inPlace=True)
-        except Exception:
-            pass
+        except Exception as exc:
+            parse_warnings.append(
+                "toSoundingPitch() failed; analysis used written pitch instead of sounding pitch. "
+                "Δp may not be comparable across transposing instruments. "
+                f"Reason: {exc!s}"
+            )
     elif pitch_space not in ("written", "sounding"):
         raise ValueError("pitch_space must be 'written' or 'sounding'")
     xml_text = _musicxml_text_for_part_ids(file_bytes, filename)
@@ -328,8 +336,17 @@ def parse_musicxml(
             sc_exp = sc.expandRepeats()
             if sc_exp is not None:
                 sc = sc_exp
-        except Exception:
-            pass
+            else:
+                parse_warnings.append(
+                    "expandRepeats() returned None; analysis used the unexpanded score. "
+                    "Repeat/volta structures may be under-represented."
+                )
+        except Exception as exc:
+            parse_warnings.append(
+                "expandRepeats() failed; analysis used the unexpanded score. "
+                "Repeat/volta structures may be under-represented. "
+                f"Reason: {exc!s}"
+            )
     parts_list = sc.parts if hasattr(sc, "parts") else [sc]
     use_xml_part_ids = bool(score_part_ids and len(score_part_ids) == len(parts_list))
     has_seconds = True
@@ -509,7 +526,7 @@ def parse_musicxml(
                     label = f"{pk} | v{vid}"
                 events_by_part[label] = collapsed
 
-    return events_by_part, has_seconds
+    return events_by_part, has_seconds, parse_warnings
 
 
 def transitions_from_events(evs: List[Event]) -> pd.DataFrame:

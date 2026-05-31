@@ -9,6 +9,7 @@ import pytest
 
 from anisotropia.analysis_warnings import (
     collect_low_n_warnings,
+    collect_parse_warnings,
     collect_unpitched_display_warnings,
 )
 from anisotropia.config import AnalysisConfig, GracePolicyNotImplementedError
@@ -45,6 +46,40 @@ def test_unpitched_proxy_warning_when_map_display():
     warns = collect_unpitched_display_warnings(evs, "map_display")
     assert len(warns) == 1
     assert "display pitch" in warns[0].message.lower()
+
+
+def test_parse_warnings_sounding_and_repeats_types():
+    msgs = [
+        "toSoundingPitch() failed; analysis used written pitch instead of sounding pitch.",
+        "expandRepeats() failed; analysis used the unexpanded score.",
+    ]
+    warns = collect_parse_warnings(msgs)
+    assert warns[0].warning_type == "sounding_pitch_fallback"
+    assert warns[1].warning_type == "expand_repeats_fallback"
+
+
+def test_pipeline_includes_sounding_pitch_fallback_warning(monkeypatch):
+    from music21 import converter
+
+    xml = (FIXTURES / "minimal_score.xml").read_bytes()
+    original_parse = converter.parse
+
+    def fake_parse(path):
+        sc = original_parse(path)
+
+        def fail(*_a, **_k):
+            raise RuntimeError("mock transpose failure")
+
+        sc.toSoundingPitch = fail
+        return sc
+
+    monkeypatch.setattr(converter, "parse", fake_parse)
+    cfg = AnalysisConfig(window_mode="total", bootstrap_ci=False, pitch_space="sounding")
+    result = run_analysis(xml, "m.xml", cfg)
+    assert any("toSoundingPitch" in w for w in result.warnings)
+    assert any(
+        sw.warning_type == "sounding_pitch_fallback" for sw in result.structured_warnings
+    )
 
 
 def test_unpitched_exclude_no_proxy_warning():

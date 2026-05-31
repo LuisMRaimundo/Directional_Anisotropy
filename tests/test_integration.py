@@ -27,7 +27,7 @@ def test_full_pipeline_single_part():
     if not xml_path.exists():
         pytest.skip("minimal_score.xml not found")
     xml_bytes = xml_path.read_bytes()
-    events_by_part, has_sec = parse_musicxml(xml_bytes, "minimal.xml")
+    events_by_part, has_sec, _ = parse_musicxml(xml_bytes, "minimal.xml")
     trans_by_part = {p: transitions_from_events(evs) for p, evs in events_by_part.items()}
     ref_part = max(trans_by_part.keys(), key=lambda k: len(trans_by_part[k]))
     windows = window_slices_for_part(trans_by_part[ref_part], "total", 1, 1)
@@ -55,7 +55,7 @@ def test_full_pipeline_multi_part_with_conflict():
     if not xml_path.exists():
         pytest.skip("minimal_two_parts.xml not found")
     xml_bytes = xml_path.read_bytes()
-    events_by_part, _ = parse_musicxml(xml_bytes, "minimal_two.xml")
+    events_by_part, _, _ = parse_musicxml(xml_bytes, "minimal_two.xml")
     trans_by_part = {p: transitions_from_events(evs) for p, evs in events_by_part.items()}
     ref_part = max(trans_by_part.keys(), key=lambda k: len(trans_by_part[k]))
     windows = window_slices_for_part(trans_by_part[ref_part], "total", 1, 1)
