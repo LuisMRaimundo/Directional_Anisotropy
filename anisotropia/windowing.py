@@ -82,17 +82,17 @@ def window_slices_for_part(
     if window_mode == "seconds":
         t = df_trans["t"].to_numpy(dtype=float)
         tmin, tmax = float(np.min(t)), float(np.max(t))
-        size = float(window_size)
-        stp = float(step)
-        if size <= 0:
-            size = (tmax - tmin) if (tmax > tmin) else 1.0
-        if stp <= 0:
-            stp = size
+        sec_size: float = float(window_size)
+        sec_step: float = float(step)
+        if sec_size <= 0:
+            sec_size = (tmax - tmin) if (tmax > tmin) else 1.0
+        if sec_step <= 0:
+            sec_step = sec_size
         cur = tmin
         while cur <= tmax:
-            wdf = df_trans[(df_trans["t"] >= cur) & (df_trans["t"] < cur + size)]
-            windows.append((f"t{cur:.2f}–{(cur+size):.2f}", wdf))
-            cur += stp
+            wdf = df_trans[(df_trans["t"] >= cur) & (df_trans["t"] < cur + sec_size)]
+            windows.append((f"t{cur:.2f}–{(cur+sec_size):.2f}", wdf))
+            cur += sec_step
         return windows
     if window_mode == "events":
         n = len(df_trans)
