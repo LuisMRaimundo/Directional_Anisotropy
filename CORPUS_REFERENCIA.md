@@ -1,6 +1,6 @@
 # Corpus de Referência — Validação notacional
 
-**Âmbito:** validação do analisador de **campo direccional notacional** (transições simbólicas MusicXML). **Não** valida áudio, percepção, harmonia ou textura geral.
+**Âmbito:** validação do analisador de **campo direccional notacional** (transições simbólicas MusicXML). **Não** valida áudio, espectral, percepção, harmonia ou textura geral. Significado das métricas congeladas ($D$, $\tau$, $A_{\mathrm{tensor}}$, $R$, …): [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).
 
 ---
 

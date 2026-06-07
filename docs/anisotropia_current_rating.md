@@ -2,6 +2,7 @@
 
 **Tool identity:** systematic notational directional-field analyzer  
 **Rubric:** `docs/anisotropia_90_rubric.md`  
+**Metric semantics:** `docs/METRIC_SEMANTICS.md`  
 **Release:** 2.4.0 (consolidation patch)  
 **Date:** 2026-06-03 (doc sync)
 

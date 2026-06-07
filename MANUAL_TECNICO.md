@@ -6,6 +6,8 @@
 
 **Ficheiros de referência:** `anisotropia/pipeline.py`, `metrics.py`, `parsing.py`, `transitions.py`, `windowing.py`, `config.py`, `reproducibility.py`, `analysis_warnings.py`, `visualizations.py`, `report.py`, `excel_export.py`, `Anisotropia.py`.
 
+> **Significado interpretativo e limites (não substitui as fórmulas abaixo):** [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md) — vocabulário, riscos de interpretação, uso musicológico, distinção escrito/sounding, conflito direccional vs dissonância.
+
 > **MathJax em sites tipo Stack Exchange:** blocos de equação usam **`$$`** em linha própria (não o delimitador LaTeX com parêntesis recto de abertura: o caracter **`[`** é interpretado como início de hiperligação Markdown). *Inline:* preferir **`$`**…**`$`** em cópias para esses sites.
 
 ---
@@ -331,6 +333,8 @@ Concatenam-se verticalmente os DataFrames de transições de todas as partes e a
 ---
 
 ## 8. Conflito direccional
+
+**Semântica interpretativa:** alinhamento de eixos \(\mu\) entre partes — **não** dissonância harmónica nem densidade textural. Ver [docs/METRIC_SEMANTICS.md §9](docs/METRIC_SEMANTICS.md#9-directional-conflict).
 
 Para uma janela \(w\), com instrumentos \(j\) com \(\mu^{(j)}\) e pesos \(W_j = \mathrm{weight\_sum}^{(j)}\) finitos:
 
