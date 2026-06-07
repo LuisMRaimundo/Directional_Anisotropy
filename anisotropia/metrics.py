@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List, Mapping, Tuple
 
 import numpy as np
 import pandas as pd
@@ -259,7 +259,7 @@ def aggregate_2A(
     return m
 
 
-def compute_directional_conflict(metrics_by_part: Dict[str, object]) -> float:
+def compute_directional_conflict(metrics_by_part: Mapping[str, object]) -> float:
     """
     Directional conflict between instruments in window w.
     Conflito(w) = 1 - R_inst(w), where R_inst = weighted circular resultant of μ(j,w).
