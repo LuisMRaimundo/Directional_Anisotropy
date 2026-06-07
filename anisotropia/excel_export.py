@@ -108,10 +108,12 @@ def instrument_metrics_with_flow_components(df_instr: pd.DataFrame) -> pd.DataFr
         return df_instr.copy()
     out = df_instr.copy()
     mu = out.get("mu")
-    A = out.get("A_tensor", 0)
     if mu is not None:
         mu_arr = pd.to_numeric(mu, errors="coerce")
-        A_arr = pd.to_numeric(A, errors="coerce").fillna(0)
+        A_series: pd.Series = (
+            out["A_tensor"] if "A_tensor" in out.columns else pd.Series(0.0, index=out.index)
+        )
+        A_arr = pd.to_numeric(A_series, errors="coerce").fillna(0)
         out["flow_U"] = A_arr * np.cos(mu_arr)
         out["flow_V"] = A_arr * np.sin(mu_arr)
     return out
