@@ -123,7 +123,7 @@ def _slice_transitions_for_window(
     if ref_wdf.empty:
         return out
     i0, i1_last = parse_event_window_label(win_label)
-    if i0 is None:
+    if i0 is None or i1_last is None:
         return out
     i1_exclusive = i1_last + 1
     for part, df in trans_by_part.items():
