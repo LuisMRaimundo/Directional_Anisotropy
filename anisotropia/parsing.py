@@ -431,7 +431,11 @@ def parse_musicxml(
             meas = measure_number_at_offset(ql_offset)
             if has_seconds:
                 try:
-                    t_sec = float(el.getOffsetInHierarchy(sc).seconds)
+                    oh_sc = el.getOffsetInHierarchy(sc)
+                    if hasattr(oh_sc, "seconds"):
+                        t_sec = float(oh_sc.seconds)
+                    else:
+                        raise AttributeError("offset has no seconds")
                 except Exception:
                     has_seconds = False
                     t_sec = ql_offset
@@ -467,10 +471,13 @@ def parse_musicxml(
             p_rep = element_pitch_rep(el, rep=chord_rep)
             if p_rep is None or (isinstance(p_rep, float) and math.isnan(p_rep)):
                 continue
-            is_u = isinstance(el, note.Unpitched) or (
-                isinstance(el, percussion.PercussionChord)
-                and el.notes
-                and all(isinstance(n, note.Unpitched) for n in el.notes)
+            is_u = bool(
+                isinstance(el, note.Unpitched)
+                or (
+                    isinstance(el, percussion.PercussionChord)
+                    and el.notes
+                    and all(isinstance(n, note.Unpitched) for n in el.notes)
+                )
             )
             ev = Event(
                 t=t_sec,
