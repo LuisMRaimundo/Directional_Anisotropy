@@ -1,11 +1,12 @@
 # Manual de Métricas — Anisotropia Notacional
 
 > **Manual técnico completo (fórmulas, algoritmos, tutorial):** [MANUAL_TECNICO.md](MANUAL_TECNICO.md).  
+> **Semântica interpretativa (limites, uso musicológico, tabela de riscos):** [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).  
 > Este ficheiro é um **resumo** para a interface Streamlit. A análise de métricas na app usa **`run_analysis`** (ver MANUAL_TECNICO §12.3).
 
 > **MathJax / Stack Exchange:** blocos de equação em **linhas próprias** com `$$` … `$$`. Evite o delimitador LaTeX “barra + parêntesis recto de abertura” para blocos: em muitos renderizadores Markdown (ex.: Stack Exchange), **`[`** inicia uma hiperligação e a fórmula deixa de ser matemática. Para *inline*, use `$` … `$`.
 
-Este manual descreve o significado das métricas de **anisotropia notacional** para um **analisador sistemático de campo direccional notacional**: estrutura direccional em transições $(\Delta t,\,\Delta p)$ extraídas de **dados simbólicos MusicXML**. **Não** é análise de áudio, percepção, harmonia, função tonal, Schenker, ou textura geral.
+Este manual descreve o significado das métricas de **anisotropia notacional** para um **analisador sistemático de campo direccional notacional**: estrutura direccional em transições $(\Delta t,\,\Delta p)$ extraídas de **dados simbólicos MusicXML**. **Não** é análise de áudio, espectral, psicoacústica, percepção do ouvinte, loudness, timbre, harmonia, função tonal, Schenker, densidade orquestral acústica, ou textura geral. Para limites e distinções interpretativas detalhadas, ver [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).
 
 ---
 
@@ -233,6 +234,8 @@ $$
 \mathrm{Conflito}(w) = 1 - R_{\mathrm{inst}}(w)
 $$
 onde $R_{\mathrm{inst}}$ é a resultante circular ponderada das orientações $\mu^{(j,w)}$. Peso $W_{j,w} =$ soma dos pesos das transições do instrumento $j$ na janela $w$. Alto conflito: camadas em direcções diferentes; baixo: orientação global coerente.
+
+**Não confundir com:** dissonância contrapontística, tensão harmónica, densidade textural ou tensão perceptiva — mede apenas o alinhamento de $\mu$ entre partes (ver [docs/METRIC_SEMANTICS.md §9](docs/METRIC_SEMANTICS.md#9-directional-conflict)).
 
 ### 6.3 Rose diagram
 

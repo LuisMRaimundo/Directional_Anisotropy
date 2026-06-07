@@ -1,6 +1,6 @@
 # Anisotropia 90+ Rubric — Notational Directional-Field Analyzer
 
-**Scope:** This rubric evaluates **Anisotropia Direcional** only as a **systematic notational directional-field analyzer** on symbolic MusicXML pitch–time transitions. It does **not** require audio, listening tests, tonal function, harmony, Schenkerian analysis, orchestration density, or general texture analysis.
+**Scope:** This rubric evaluates **Anisotropia Direcional** only as a **systematic notational directional-field analyzer** on symbolic MusicXML pitch–time transitions. It does **not** require audio, listening tests, tonal function, harmony, Schenkerian analysis, orchestration density, or general texture analysis. Interpretive semantics and limits: [METRIC_SEMANTICS.md](METRIC_SEMANTICS.md).
 
 **Total:** 100 points
 

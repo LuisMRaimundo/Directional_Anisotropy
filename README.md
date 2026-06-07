@@ -15,6 +15,7 @@ Anisotropia Direcional measures **notational directionality** in pitch–time tr
 
 > **📘 [MANUAL_TECNICO.md](MANUAL_TECNICO.md)** — Fórmulas e algoritmos  
 > **📖 [MANUAL_METRICAS.md](MANUAL_METRICAS.md)** — Resumo das métricas  
+> **🧭 [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)** — Significado interpretativo, limites e uso musicológico das métricas  
 > **📋 [CORPUS_REFERENCIA.md](CORPUS_REFERENCIA.md)** — Fixtures e benchmark  
 > **📊 [docs/anisotropia_90_rubric.md](docs/anisotropia_90_rubric.md)** — Rubrica 90+ (notacional)  
 > **📈 [docs/anisotropia_current_rating.md](docs/anisotropia_current_rating.md)** — Pontuação actual (88/100)
@@ -79,13 +80,16 @@ python corpus/scripts/reproduce_tables.py
 
 ## Metrics
 
+Symbolic **notational** descriptors only — not audio, spectral, or perceptual measures. See **[docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)** for interpretive meaning, limits, and musicological use.
+
 | Metric | Description |
 |--------|-------------|
 | **D** | Drift (weighted signed pitch change) |
 | **τ** | Tortuosity |
-| **$A_{\mathrm{tensor}}$** | Tensor anisotropy in \((\Delta t, \Delta p)\) |
-| **μ** | Principal orientation (radians) |
-| **R** | Angular coherence |
+| **$A_{\mathrm{tensor}}$** | Tensor anisotropy in \((\Delta t, \Delta p)\) — not acoustic anisotropy |
+| **μ** | Principal orientation (radians) in the model's Δt–Δp plane |
+| **R** | Angular coherence (directional concentration, not movement amount) |
+| **Directional conflict** | Misalignment of per-part μ (\(1 - R_{\mathrm{inst}}\)) — not harmonic dissonance |
 
 ## Legal and citation
 
