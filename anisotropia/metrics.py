@@ -259,7 +259,7 @@ def aggregate_2A(
     return m
 
 
-def compute_directional_conflict(metrics_by_part: Mapping[str, object]) -> float:
+def compute_directional_conflict(metrics_by_part: Mapping[str, Metrics]) -> float:
     """
     Directional conflict between instruments in window w.
     Conflito(w) = 1 - R_inst(w), where R_inst = weighted circular resultant of μ(j,w).
