@@ -11,7 +11,7 @@ Anisotropia Direcional measures **notational directionality** in pitch–time tr
 
 **Estrutura:** `anisotropia/` (parsing, metrics, transitions, **pipeline**, sensitivity) + `Anisotropia.py` (Streamlit UI).
 
-**CI:** GitHub Actions — tests (**141**), coverage ≥78% (~**85%**), frozen corpus comparison, **ruff** (blocking) — see `.github/workflows/tests.yml`.
+**CI:** GitHub Actions — tests (**254**), coverage ≥78% (~**93%**), frozen corpus comparison, **ruff** (blocking) — see `.github/workflows/tests.yml`.
 
 > **📘 [MANUAL_TECNICO.md](MANUAL_TECNICO.md)** — Fórmulas e algoritmos  
 > **📖 [MANUAL_METRICAS.md](MANUAL_METRICAS.md)** — Resumo das métricas  

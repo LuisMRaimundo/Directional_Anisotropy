@@ -4,7 +4,7 @@
 **Rubric:** `docs/anisotropia_90_rubric.md`  
 **Metric semantics:** `docs/METRIC_SEMANTICS.md`  
 **Release:** 2.4.0 (consolidation patch)  
-**Date:** 2026-06-03 (doc sync)
+**Date:** 2026-06-10 (test/coverage stats refreshed)
 
 ---
 
@@ -23,7 +23,7 @@
 | 3. Parsing & ontology | 15 | **13** | Edge tests; `include_attached` → `NotImplementedError` |
 | 4. Corpus & frozen outputs | 20 | **12** | Manifest + 2 frozen metrics; **0 official** benchmarks |
 | 5. Programmatic core | 15 | **14** | Streamlit uses `run_analysis()` |
-| 6. Testing & CI | 10 | **9** | 141 tests; coverage ~85%; ruff blocking in CI |
+| 6. Testing & CI | 10 | **9** | 254 tests; coverage ~93%; ruff blocking in CI |
 | 7. Sensitivity | 10 | **8** | `sensitivity.py` + tests |
 | 8. Reproducibility | 5 | **5** | `config_sha256` always set; warnings in metadata/report |
 
