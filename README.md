@@ -101,7 +101,7 @@ Symbolic **notational** descriptors only — not audio, spectral, or perceptual 
 
 ## Installers (optional)
 
-**Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
+**Repository:** https://github.com/LuisMRaimundo/Directional_Anisotropy
 
 End users without Python: see **[`installers/`](installers/)** — especially on Windows, double-click **`installers/windows/INSTALL.bat`** (installs Python if needed, sets up `.venv`, installs libraries, launches the app).
 
@@ -111,7 +111,7 @@ End users without Python: see **[`installers/`](installers/)** — especially on
 | [`installers/mac/`](installers/mac/) | `install-easy.sh` / `install.sh` | *Not in git* |
 | [`installers/linux/`](installers/linux/) | `install-easy.sh` / `install.sh` | *Not in git* |
 
-Built `.exe` / `.app` / `.dmg` / `.tar.gz` files are **not** in git — use [GitHub Releases](https://github.com/LuisMRaimundo/Music_anisotropy/releases) if you distribute frozen builds.
+Built `.exe` / `.app` / `.dmg` / `.tar.gz` files are **not** in git — use [GitHub Releases](https://github.com/LuisMRaimundo/Directional_Anisotropy/releases) if you distribute frozen builds.
 
 ## Acknowledgements
 

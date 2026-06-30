@@ -1,6 +1,6 @@
 # Directional_Anisotropy - Windows installation
 
-**Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
+**Repository:** https://github.com/LuisMRaimundo/Directional_Anisotropy
 
 ## Standard installation (no Python required)
 

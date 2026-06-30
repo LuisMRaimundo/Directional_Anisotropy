@@ -7,8 +7,8 @@ authors:
     given-names: "Luís"
 version: "2.4.0"
 date-released: "2026-05-20"
-repository-code: "https://github.com/LuisMRaimundo/Music_anisotropy"
-url: "https://github.com/LuisMRaimundo/Music_anisotropy"
+repository-code: "https://github.com/LuisMRaimundo/Directional_Anisotropy"
+url: "https://github.com/LuisMRaimundo/Directional_Anisotropy"
 abstract: "Systematic notational directional-field analyzer for symbolic MusicXML: drift, tortuosity, structure-tensor anisotropy, circular coherence, and directional conflict on pitch–time transitions. Not audio, perception, harmony, or general texture analysis."
 keywords:
   - musicxml

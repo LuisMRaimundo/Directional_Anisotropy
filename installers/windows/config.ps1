@@ -1,6 +1,6 @@
 # Directional_Anisotropy - Windows installer constants
 $script:AnisotropiaConfig = @{
-    GitHubRepoUrl        = 'https://github.com/LuisMRaimundo/Music_anisotropy'
+    GitHubRepoUrl        = 'https://github.com/LuisMRaimundo/Directional_Anisotropy'
     AppName              = 'Directional_Anisotropy'
     PythonVersion        = '3.11'
     PythonMinMinor       = 10

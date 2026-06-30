@@ -2,7 +2,7 @@
 
 One-click setup for users **without Python**. Scripts install Python 3.10+ when needed, create `.venv/`, install `requirements-app.txt`, and launch the Streamlit UI.
 
-**Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
+**Repository:** https://github.com/LuisMRaimundo/Directional_Anisotropy
 
 ## Quick start
 
@@ -18,7 +18,7 @@ After install, use **`START-Directional-Anisotropy.bat`** (Windows), **`START-Di
 
 | Folder | Standard install | Portable build (PyInstaller) |
 |--------|------------------|------------------------------|
-| [`windows/`](windows/) | **`INSTALL.bat`**, `Install-Anisotropia.ps1` | *Not included in git* — see [GitHub Releases](https://github.com/LuisMRaimundo/Music_anisotropy/releases) if distributed |
+| [`windows/`](windows/) | **`INSTALL.bat`**, `Install-Anisotropia.ps1` | *Not included in git* — see [GitHub Releases](https://github.com/LuisMRaimundo/Directional_Anisotropy/releases) if distributed |
 | [`mac/`](mac/) | `install.sh`, `install-easy.sh` | *Not included in git* |
 | [`linux/`](linux/) | `install.sh`, `install-easy.sh` | *Not included in git* |
 
