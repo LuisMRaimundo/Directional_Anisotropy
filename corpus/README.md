@@ -1,6 +1,6 @@
-# Corpus and benchmark package (Anisotropia Direcional)
+# Corpus and benchmark package (Directional_Anisotropy)
 
-**Anisotropia Direcional** is a **systematic notational directional-field analyzer**: it measures directionality in symbolic **pitch–time transitions** from MusicXML. It does **not** measure audio, perception, harmony, or general texture.
+**Directional_Anisotropy** is a **systematic notational directional-field analyzer**: it measures directionality in symbolic **pitch–time transitions** from MusicXML. It does **not** measure audio, perception, harmony, or general texture.
 
 ## Status (this release)
 

@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# Anisotropia Direcional - Windows one-click installer (PowerShell)
+# Directional_Anisotropy - Windows one-click installer (PowerShell)
 
 $ErrorActionPreference = 'Stop'
 $InstallerRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -43,7 +43,7 @@ try {
     Write-Host "  Run again later: $($cfg.StartBatName)"
     Write-Host ''
 
-    Start-AnisotropiaApp -VenvPython $venvPython -ProjectRoot $ProjectRoot
+    START-Directional-AnisotropyApp -VenvPython $venvPython -ProjectRoot $ProjectRoot
 }
 catch {
     Write-InstallLog $_.Exception.Message 'ERROR'

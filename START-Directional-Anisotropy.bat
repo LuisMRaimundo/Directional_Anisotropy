@@ -6,7 +6,7 @@ if not exist ".venv\Scripts\python.exe" (
     pause
     exit /b 1
 )
-echo Starting Anisotropia Direcional...
+echo Starting Directional_Anisotropy...
 echo Close this window to stop the app.
 ".venv\Scripts\python.exe" -m streamlit run Anisotropia.py
 pause

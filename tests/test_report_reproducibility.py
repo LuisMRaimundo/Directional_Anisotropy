@@ -33,8 +33,18 @@ def test_repro_metadata_keys():
     meta = build_reproducibility_metadata(
         filename="m.xml", xml_bytes=xml, config=cfg, corpus_id="SYNTH_MINIMAL_ASCENDING"
     )
-    for key in ("software_version", "input_sha256", "config_sha256", "bootstrap_random_seed", "N_BOOTSTRAP"):
+    for key in (
+        "canonical_tool_name",
+        "package_name",
+        "software_version",
+        "input_sha256",
+        "config_sha256",
+        "bootstrap_random_seed",
+        "N_BOOTSTRAP",
+    ):
         assert key in meta
+    assert meta["canonical_tool_name"] == "Directional_Anisotropy"
+    assert meta["package_name"] == "anisotropia"
     assert "global_zscore" in meta["global_zscore_note"]
 
 

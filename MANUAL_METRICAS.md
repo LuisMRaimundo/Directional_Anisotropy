@@ -1,4 +1,4 @@
-# Manual de Métricas — Anisotropia Notacional
+# Manual de Métricas — Directional_Anisotropy
 
 > **Manual técnico completo (fórmulas, algoritmos, tutorial):** [MANUAL_TECNICO.md](MANUAL_TECNICO.md).  
 > **Semântica interpretativa (limites, uso musicológico, tabela de riscos):** [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).  
@@ -6,7 +6,7 @@
 
 > **MathJax / Stack Exchange:** blocos de equação em **linhas próprias** com `$$` … `$$`. Evite o delimitador LaTeX “barra + parêntesis recto de abertura” para blocos: em muitos renderizadores Markdown (ex.: Stack Exchange), **`[`** inicia uma hiperligação e a fórmula deixa de ser matemática. Para *inline*, use `$` … `$`.
 
-Este manual descreve o significado das métricas de **anisotropia notacional** para um **analisador sistemático de campo direccional notacional**: estrutura direccional em transições $(\Delta t,\,\Delta p)$ extraídas de **dados simbólicos MusicXML**. **Não** é análise de áudio, espectral, psicoacústica, percepção do ouvinte, loudness, timbre, harmonia, função tonal, Schenker, densidade orquestral acústica, ou textura geral. Para limites e distinções interpretativas detalhadas, ver [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).
+Este manual descreve o significado das métricas de **Directional_Anisotropy** para um **analisador sistemático de campo direccional notacional**: estrutura direccional em transições $(\Delta t,\,\Delta p)$ extraídas de **dados simbólicos MusicXML**. **Não** é análise de áudio, espectral, psicoacústica, percepção do ouvinte, loudness, timbre, harmonia, função tonal, Schenker, densidade orquestral acústica, ou textura geral. Para limites e distinções interpretativas detalhadas, ver [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).
 
 ---
 

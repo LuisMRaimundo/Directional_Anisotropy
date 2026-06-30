@@ -1,6 +1,6 @@
 {
   "manifest_version": "1.0.0",
-  "description": "Symbolic MusicXML benchmark manifest for Anisotropia Direcional. Synthetic fixtures only in this release.",
+  "description": "Symbolic MusicXML benchmark manifest for Directional_Anisotropy. Synthetic fixtures only in this release.",
   "official_representative_corpus_exists": false,
   "entries": [
     {

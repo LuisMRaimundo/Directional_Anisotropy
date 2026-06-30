@@ -1,4 +1,4 @@
-# Metric semantics — Anisotropia Direcional
+# Metric semantics — Directional_Anisotropy
 
 **Version:** 2.4.0  
 **Scope:** Interpretive and methodological meaning of the main notational directional-field metrics, aligned with the implementation in `anisotropia/`.
@@ -10,7 +10,7 @@
 
 ## 1. Scope and methodological status
 
-**Music_anisotropy** (package `anisotropia`) computes **symbolic / notational descriptors** of directional organisation in **score-derived musical events**. Input is **MusicXML** (or related symbolic formats parsed via music21). The system builds a field of pitch–time **transition vectors** \((\Delta t, \Delta p)\) and summarises their distribution with scalar metrics, structure-tensor quantities, circular statistics, and optional windowed aggregates.
+**Directional_Anisotropy** (package `anisotropia`) computes **symbolic / notational descriptors** of directional organisation in **score-derived musical events**. Input is **MusicXML** (or related symbolic formats parsed via music21). The system builds a field of pitch–time **transition vectors** \((\Delta t, \Delta p)\) and summarises their distribution with scalar metrics, structure-tensor quantities, circular statistics, and optional windowed aggregates.
 
 This is **not**:
 

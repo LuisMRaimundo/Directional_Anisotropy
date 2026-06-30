@@ -13,7 +13,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-from anisotropia import run_analysis
+from anisotropia import CANONICAL_TOOL_NAME, run_analysis
 from anisotropia.config import GracePolicyNotImplementedError, analysis_config_from_ui
 from anisotropia.metrics import N_MIN_STABLE
 from anisotropia.windowing import window_sort_key
@@ -35,8 +35,8 @@ def _show_matplotlib(fig) -> None:
     st.pyplot(fig, use_container_width=False)
 
 # --- UI ---
-st.set_page_config(page_title="Anisotropia Direcional (MusicXML)", layout="wide")
-st.title("Anisotropia direcional em partitura (MusicXML): direção + desvio + tensor")
+st.set_page_config(page_title=f"{CANONICAL_TOOL_NAME} (MusicXML)", layout="wide")
+st.title(f"{CANONICAL_TOOL_NAME} — anisotropia direcional em partitura (MusicXML)")
 
 with st.sidebar:
     st.header("Entrada")

@@ -1,4 +1,4 @@
-# Manual Técnico — Anisotropia Notacional
+# Manual Técnico — Directional_Anisotropy
 
 **Versão:** 2.4.0  
 **Data:** Maio 2026  
@@ -37,7 +37,7 @@
 
 ### 1.1 Objectivo
 
-O sistema mede **anisotropia notacional** (campo direccional notacional sistemático) em dados **simbólicos MusicXML**: até que ponto as transições \((\Delta t, \Delta p)\) concentram uma **direcção preferencial** no plano tempo–altura, usando um **tensor de estrutura** 2×2 (analogia pedagógica adaptada a dados notacionais discretos) e **estatística circular** para coerência angular.
+O sistema mede **Directional_Anisotropy** (campo direccional notacional sistemático) em dados **simbólicos MusicXML**: até que ponto as transições \((\Delta t, \Delta p)\) concentram uma **direcção preferencial** no plano tempo–altura, usando um **tensor de estrutura** 2×2 (analogia pedagógica adaptada a dados notacionais discretos) e **estatística circular** para coerência angular.
 
 **Não mede:** áudio, timbre, percepção, função tonal, direcção schenkeriana, progressão harmónica, gramática completa de condução de vozes, densidade orquestral, nem textura geral.
 

@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 clear
 echo ""
 echo "  ========================================"
-echo "   Anisotropia Direcional"
+echo "   Directional_Anisotropy"
 echo "   One-click install for Linux"
 echo "  ========================================"
 echo ""

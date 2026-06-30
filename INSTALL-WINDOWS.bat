@@ -1,10 +1,10 @@
 @echo off
-title Anisotropia Direcional - Install (Windows)
+title Directional_Anisotropy - Install (Windows)
 cd /d "%~dp0"
 
 echo.
 echo  ========================================
-echo   Anisotropia Direcional
+echo   Directional_Anisotropy
 echo   One-click install for Windows 10/11
 echo  ========================================
 echo.

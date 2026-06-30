@@ -1,5 +1,5 @@
 #!/bin/bash
-# Double-click this file in Finder to install and run Anisotropia Direcional on macOS.
+# Double-click this file in Finder to install and run Directional_Anisotropy on macOS.
 
 cd "$(dirname "$0")"
 export STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
@@ -7,7 +7,7 @@ export STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 clear
 echo ""
 echo "  ========================================"
-echo "   Anisotropia Direcional"
+echo "   Directional_Anisotropy"
 echo "   One-click install for macOS"
 echo "  ========================================"
 echo ""

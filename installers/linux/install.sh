@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Anisotropia Direcional — Linux one-click installer
+# Directional_Anisotropy — Linux one-click installer
 
 set -euo pipefail
 
@@ -57,7 +57,7 @@ install_python_linux() {
 }
 
 echo ""
-echo "  Anisotropia Direcional — Linux installer"
+echo "  Directional_Anisotropy — Linux installer"
 echo "  Project: $PROJECT_ROOT"
 echo ""
 
@@ -80,8 +80,8 @@ step "Installing dependencies (first time may take 5–15 minutes)..."
 "$VENV_PY" -m pip install --upgrade pip wheel setuptools
 "$VENV_PY" -m pip install -r "$REQ_FILE"
 
-step "Writing START-Anisotropia.sh launcher..."
-cat > "$PROJECT_ROOT/START-Anisotropia.sh" << 'LAUNCHER'
+step "Writing START-Directional-Anisotropy.sh launcher..."
+cat > "$PROJECT_ROOT/START-Directional-Anisotropy.sh" << 'LAUNCHER'
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 export STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
@@ -90,13 +90,13 @@ if [[ ! -x ".venv/bin/python" ]]; then
   read -r -p "Press Enter to close..."
   exit 1
 fi
-echo "Starting Anisotropia Direcional..."
+echo "Starting Directional_Anisotropy..."
 echo "Press Ctrl+C in this terminal to stop the app."
 exec .venv/bin/python -m streamlit run Anisotropia.py
 LAUNCHER
-chmod +x "$PROJECT_ROOT/START-Anisotropia.sh"
+chmod +x "$PROJECT_ROOT/START-Directional-Anisotropy.sh"
 
-step "Starting Anisotropia (browser should open)..."
-echo "To run again later, run: ./START-Anisotropia.sh"
+step "Starting Directional_Anisotropy (browser should open)..."
+echo "To run again later, run: ./START-Directional-Anisotropy.sh"
 echo ""
 exec "$VENV_PY" -m streamlit run "$APP_FILE"

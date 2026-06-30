@@ -1,5 +1,5 @@
 @echo off
-title Anisotropia Direcional - Installer
+title Directional_Anisotropy - Installer
 cd /d "%~dp0\..\.." || (
   echo ERROR: Cannot find project root.
   pause
@@ -10,7 +10,7 @@ echo.
 echo  *** USE THIS FILE FOR NORMAL INSTALL ***
 echo.
 echo  ========================================
-echo   Anisotropia Direcional
+echo   Directional_Anisotropy
 echo   One-click install for Windows 10/11
 echo  ========================================
 echo.

@@ -1,4 +1,4 @@
-# Anisotropia Direcional - Windows installation
+# Directional_Anisotropy - Windows installation
 
 **Repository:** https://github.com/LuisMRaimundo/Music_anisotropy
 
@@ -18,7 +18,7 @@ You can also run **`INSTALL-WINDOWS.bat`** at the repository root (same installe
 
 ## Run again later
 
-Double-click **`START-Anisotropia.bat`** in the project root (created by the installer).
+Double-click **`START-Directional-Anisotropy.bat`** in the project root (created by the installer).
 
 ## Troubleshooting
 

@@ -1,12 +1,13 @@
-# Anisotropia Direcional
+# Directional_Anisotropy
 
+**Canonical tool name:** **Directional_Anisotropy**  
 **Systematic notational directional-field analyzer** for symbolic **MusicXML** scores.
 
-Anisotropia Direcional measures **notational directionality** in pitch–time transitions \((\Delta t, \Delta p)\): drift \(D\), tortuosity \(\tau\), tensor anisotropy \(A_{\mathrm{tensor}}\), principal axis \(\mu_{\mathrm{axis}}\), angular coherence \(R\), aggregations 2A/2B, and directional conflict.
+Directional_Anisotropy measures **notational directionality** in pitch–time transitions \((\Delta t, \Delta p)\): drift \(D\), tortuosity \(\tau\), tensor anisotropy \(A_{\mathrm{tensor}}\), principal axis \(\mu_{\mathrm{axis}}\), angular coherence \(R\), aggregations 2A/2B, and directional conflict.
 
 **It is not:** audio analysis, a perception model, harmonic or Schenkerian analysis, orchestration density, or general texture analysis. The structure-tensor analogy applies to **discrete notational data**, not waveforms or images.
 
-**Package version:** 2.4.0 (`anisotropia/__init__.py`)  
+**Package version:** 2.4.0 (`anisotropia`; canonical tool name **Directional_Anisotropy**)  
 **Python:** ≥ 3.10
 
 **Estrutura:** `anisotropia/` (parsing, metrics, transitions, **pipeline**, sensitivity) + `Anisotropia.py` (Streamlit UI).
@@ -38,9 +39,9 @@ Download or clone the project, then use **one file** for your system:
 
 | System | First-time install | Later (already installed) |
 |--------|--------------------|---------------------------|
-| **Windows 10/11** | Double-click **`installers/windows/INSTALL.bat`** (or **`INSTALL-WINDOWS.bat`** at repo root) | **`START-Anisotropia.bat`** |
-| **macOS** | Double-click **`INSTALL-MAC.command`** | **`START-Anisotropia.command`** |
-| **Linux** | **`bash installers/linux/install-easy.sh`** (or **`INSTALL-LINUX.sh`**) | **`./START-Anisotropia.sh`** |
+| **Windows 10/11** | Double-click **`installers/windows/INSTALL.bat`** (or **`INSTALL-WINDOWS.bat`** at repo root) | **`START-Directional-Anisotropy.bat`** |
+| **macOS** | Double-click **`INSTALL-MAC.command`** | **`START-Directional-Anisotropy.command`** |
+| **Linux** | **`bash installers/linux/install-easy.sh`** (or **`INSTALL-LINUX.sh`**) | **`./START-Directional-Anisotropy.sh`** |
 
 The installer will install Python 3.10+ if needed, create `.venv/`, install dependencies, and open the app in your browser. Details: [`installers/README.md`](installers/README.md).
 

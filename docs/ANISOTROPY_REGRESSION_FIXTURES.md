@@ -8,7 +8,7 @@
 
 ## Purpose
 
-Phase 1 provides a **musicological regression suite** for **symbolic directional anisotropy** in Music_anisotropy. The fixtures are small deterministic MusicXML scores designed to validate **interpretive semantics** of the implemented metrics through:
+Phase 1 provides a **musicological regression suite** for **symbolic directional anisotropy** in Directional_Anisotropy. The fixtures are small deterministic MusicXML scores designed to validate **interpretive semantics** of the implemented metrics through:
 
 - pipeline smoke tests (parse → transitions → metrics without crash);
 - **qualitative** expectations (e.g. higher vs lower concentration);

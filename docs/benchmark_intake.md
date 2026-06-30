@@ -1,6 +1,6 @@
 # Benchmark intake (official corpus)
 
-**Anisotropia Direcional** is a systematic notational directional-field analyzer. Official benchmarks must be **licensed or owned** MusicXML — never synthetic-only fixtures.
+**Directional_Anisotropy** is a systematic notational directional-field analyzer. Official benchmarks must be **licensed or owned** MusicXML — never synthetic-only fixtures.
 
 ## Required manifest fields
 

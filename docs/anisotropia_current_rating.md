@@ -1,4 +1,4 @@
-# Current rating — Anisotropia Direcional (notational 90 rubric)
+# Current rating — Directional_Anisotropy (notational 90 rubric)
 
 **Tool identity:** systematic notational directional-field analyzer  
 **Rubric:** `docs/anisotropia_90_rubric.md`  

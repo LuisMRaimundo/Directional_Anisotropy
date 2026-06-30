@@ -1,4 +1,4 @@
-# Cleanup report — Anisotropia Direcional
+# Cleanup report — Directional_Anisotropy
 
 **Date:** 2026-05-20  
 **Scope:** Documentation alignment and prudent housekeeping. **No metric formula changes.** **No intentional numerical output changes.**
@@ -147,4 +147,4 @@ python -c "from anisotropia import AnalysisConfig, run_analysis; print('ok')"  �
 
 ## 13. Identity preserved
 
-Anisotropia Direcional remains a **systematic notational directional-field analyzer** for symbolic MusicXML pitch–time transitions — not audio, perception, harmony, orchestration, or general texture analysis.
+Directional_Anisotropy remains a **systematic notational directional-field analyzer** for symbolic MusicXML pitch–time transitions — not audio, perception, harmony, orchestration, or general texture analysis.

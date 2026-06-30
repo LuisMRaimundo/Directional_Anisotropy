@@ -6,7 +6,7 @@ import hashlib
 import json
 from typing import Any, Dict, List, Optional
 
-from anisotropia import METRIC_SCHEMA_VERSION, __version__
+from anisotropia import CANONICAL_TOOL_NAME, METRIC_SCHEMA_VERSION, PACKAGE_NAME, __version__
 from anisotropia.analysis_warnings import AnalysisWarning, warnings_to_metadata
 from anisotropia.config import AnalysisConfig
 from anisotropia.metrics import N_BOOTSTRAP, N_MIN_BOOTSTRAP, N_MIN_STABLE
@@ -147,9 +147,11 @@ def _base_metadata(
     corpus_id: Optional[str],
 ) -> Dict[str, Any]:
     return {
+        "canonical_tool_name": CANONICAL_TOOL_NAME,
+        "package_name": PACKAGE_NAME,
         "software_version": __version__,
         "metric_schema_version": METRIC_SCHEMA_VERSION,
-        "analyzer_identity": "systematic notational directional-field analyzer",
+        "analyzer_identity": "Directional_Anisotropy — systematic notational directional-field analyzer",
         "input_filename": filename,
         "input_sha256": sha256_bytes(xml_bytes),
         "config_sha256": config_sha256,

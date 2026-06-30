@@ -1,4 +1,4 @@
-# Cleanup inventory — Anisotropia Direcional
+# Cleanup inventory — Directional_Anisotropy
 
 **Date:** 2026-05-20  
 **Identity:** systematic notational directional-field analyzer (symbolic MusicXML).  

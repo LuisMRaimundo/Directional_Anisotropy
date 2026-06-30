@@ -19,7 +19,7 @@ def test_generate_report_basic():
     ])
     params = {"chord_rep": "centroid", "weight_mode": "dur", "window_mode": "total", "window_size": 1, "step": 1, "scientific_mode": True}
     report = generate_report("test.xml", df, params, n_parts=5, n_windows=1, total_transitions=100)
-    assert "Notational Anisotropy Analysis Report" in report
+    assert "Directional_Anisotropy" in report
     assert "Technical Report" in report
     assert "Plain-Language Summary" in report
     assert "D = " in report or "Drift" in report

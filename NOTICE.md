@@ -4,7 +4,7 @@ Copyright © 2026 Luís Raimundo. All rights reserved.
 
 This repository and its contents, including source code, documentation, mathematical formulations, tests, validation reports, data structures, configuration files, and associated materials, are proprietary research material.
 
-**Anisotropia Direcional** is a systematic notational directional-field analyzer for symbolic MusicXML pitch–time transitions. It is not distributed under an open-source licence.
+**Directional_Anisotropy** is a systematic notational directional-field analyzer for symbolic MusicXML pitch–time transitions. It is not distributed under an open-source licence.
 
 No open-source licence is granted.
 

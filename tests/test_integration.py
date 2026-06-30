@@ -43,7 +43,7 @@ def test_full_pipeline_single_part():
     rows = [dict(window=win_label, scope="total_2B", part="TOTAL_2B", D=mB.D, tau=mB.tau, A_tensor=mB.A_tensor, mu=mB.mu, R=mB.R, n=mB.n)]
     df = pd.DataFrame(rows)
     report = generate_report("minimal.xml", df, dict(chord_rep="centroid", weight_mode="dur", window_mode="total", window_size=1, step=1, scientific_mode=False), 1, 1, 3)
-    assert "Notational Anisotropy" in report
+    assert "Directional_Anisotropy" in report
     assert "References" in report
     assert "Rousseeuw" in report
     assert "Weickert" not in report
