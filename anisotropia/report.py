@@ -138,7 +138,7 @@ def generate_report(
     report.append(f"| Window size | {params.get('window_size', '—')} |")
     report.append(f"| Step | {params.get('step', '—')} |")
     report.append(f"| Scientific mode (bootstrap CI only) | {params.get('scientific_mode', False)} |")
-    report.append(f"| Tensor standardization mode (`standardization_mode`) | {params.get('standardization_mode', 'local_zscore')} |")
+    report.append(f"| Tensor standardization mode (`standardization_mode`) | {params.get('standardization_mode', 'rms_scale')} |")
     if str(params.get("standardization_mode", "")).lower() == "global_zscore":
         report.append(
             "| global_zscore (operational) | **Alias of local_zscore** per metric window — not corpus-global normalization |"
@@ -265,15 +265,29 @@ def generate_report(
     report.append(
         "**Tensor increments:** The structure tensor $\\mathbf{J}$ is built from transformed "
         "$(\\Delta t_i, \\Delta p_i)$ according to **`standardization_mode`** "
-        f"({params.get('standardization_mode', 'local_zscore')}). "
+        f"({params.get('standardization_mode', 'rms_scale')}). "
         "This is **independent** of **scientific mode**, which only toggles **bootstrap confidence intervals** when sample sizes suffice."
+    )
+    report.append("")
+    report.append(
+        "With `rms_scale` (default), each component is divided by its weighted root mean square. "
+        "**No centring is applied** (the weighted mean is not subtracted):"
+    )
+    report.append("")
+    report.append(
+        "$$s_k = \\sqrt{\\frac{\\sum_i w_i v_{k,i}^2}{\\sum_i w_i}}, \\quad "
+        "\\tilde{v}_{k,i} = \\frac{v_{k,i}}{\\max(s_k, \\varepsilon)}$$"
+    )
+    report.append("")
+    report.append(
+        "Thus $\\mathbf{J}$ stays an uncentred structure tensor, not a covariance matrix."
     )
     report.append("")
     report.append("With `local_zscore`, within each window:")
     report.append("")
     report.append("$$\\tilde{v}_1 = \\frac{\\Delta t - \\mu_{\\Delta t}}{\\sigma_{\\Delta t}}, \\quad \\tilde{v}_2 = \\frac{\\Delta p - \\mu_{\\Delta p}}{\\sigma_{\\Delta p}}$$")
     report.append("")
-    report.append("(Other modes: see `MANUAL_TECNICO.md` §4 — `none`, `robust_scale`, `global_zscore` alias.)")
+    report.append("(Other modes: see `MANUAL_TECNICO.md` §4 — `none`, `robust_scale`, `global_zscore` alias of `local_zscore`.)")
     report.append("")
 
     report.append("### 3.3 Metric Definitions")

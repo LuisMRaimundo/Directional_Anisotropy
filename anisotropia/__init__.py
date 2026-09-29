@@ -1,7 +1,7 @@
 # Directional_Anisotropy — systematic notational directional-field analyzer (MusicXML)
 
-__version__ = "2.4.0"
-METRIC_SCHEMA_VERSION = "1.0.0"
+__version__ = "2.5.0"
+METRIC_SCHEMA_VERSION = "1.1.0"
 CANONICAL_TOOL_NAME = "Directional_Anisotropy"
 PACKAGE_NAME = "anisotropia"
 

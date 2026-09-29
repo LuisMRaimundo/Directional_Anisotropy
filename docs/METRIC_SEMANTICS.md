@@ -1,6 +1,6 @@
 # Metric semantics — Directional_Anisotropy
 
-**Version:** 2.4.0  
+**Version:** 2.5.0  
 **Scope:** Interpretive and methodological meaning of the main notational directional-field metrics, aligned with the implementation in `anisotropia/`.
 
 > **Implementation reference (formulas, algorithms):** [MANUAL_TECNICO.md](../MANUAL_TECNICO.md)  
@@ -39,7 +39,7 @@ What **is** measured: **directional behaviour of parsed symbolic pitch/time even
 | **Δt** | Temporal displacement between successive events in the chain: \(\Delta t^{\mathrm{ql}} = \mathrm{ql}_{b} - \mathrm{ql}_{a}\), \(\Delta t^{\mathrm{sec}} = t_{b} - t_{a}\). |
 | **Δp** | Pitch displacement in semitones: \(\Delta p = p_{b} - p_{a}\) (positive = upward in the chosen pitch space). |
 | **Part-level analysis** | Metrics computed per instrument/part (and optionally per voice if `split_voices=True`) on that part's horizontal transitions within each window. |
-| **Aggregate-level analysis** | **2A**: weighted mean of per-part metrics (circular mean for μ). **2B**: single metric pass on the **pooled** transition set of all parts. |
+| **Aggregate-level analysis** | **2A**: weighted mean of per-part metrics (axial mean of μ, via \(2\mu\)). **2B**: single metric pass on the **pooled** transition set of all parts. |
 | **Analysis window** | A slice of transitions sharing a label (`total`, `m4–m7`, `t1.50–6.50`, `e25–e74`, …). All parts are cut to the **same** window labels (reference part = most transitions). |
 | **Window mode** | How windows are defined: `measures`, `seconds`, `events`, or `total`. See §10. |
 | **Written pitch space** | `pitch_space="written"`: pitches as notated; transposing instruments retain written transposition. |
@@ -47,7 +47,7 @@ What **is** measured: **directional behaviour of parsed symbolic pitch/time even
 | **Directional flow** | Visual/export shorthand: components **flow_U**, **flow_V** = \(A_{\mathrm{tensor}} \cos\mu\), \(A_{\mathrm{tensor}} \sin\mu\) (see §8). |
 | **Anisotropy** | In this project: **concentration of transition directions** in \((\Delta t, \Delta p)\) space, quantified mainly by **\(A_{\mathrm{tensor}}\)** and related tensor/circular measures — **not** physical or acoustic anisotropy. |
 | **Directional concentration** | Alignment of transition **directions** (angles \(\theta_i = \mathrm{atan2}(\Delta p_i, \Delta t_i)\)), summarised by **R** and related quantities. Distinct from total **amount** of pitch movement. |
-| **Directional conflict** | Between parts in a window: **\(1 - R_{\mathrm{inst}}\)** where \(R_{\mathrm{inst}}\) is the weighted circular resultant of per-part **μ** values. See §9. |
+| **Directional conflict** | Between parts in a window: **\(1 - R_{\mathrm{inst}}\)** where \(R_{\mathrm{inst}}\) is the weighted axial resultant of per-part **μ** (angles doubled). See §9. |
 
 ### Parsing assumptions (high level)
 
@@ -124,7 +124,7 @@ D = \frac{\sum_i w_i \Delta p_i}{\mathrm{denom}}
 
 ## 5. Direction angle μ
 
-**μ** (`Metrics.mu`, alias of `mu_axis`) is the **principal-axis angle** of the **structure tensor** \(\mathbf{J}\) built from **standardised** \((\Delta t, \Delta p)\) (per `standardization_mode`).
+**μ** (`Metrics.mu`, alias of `mu_axis`) is the **principal axis** of the **structure tensor** \(\mathbf{J}\) built from **standardised** \((\Delta t, \Delta p)\) (per `standardization_mode`). The default standardisation is `rms_scale` (weighted RMS, no mean subtraction). `local_zscore` still centres each axis and divides by its weighted standard deviation.
 
 **Tensor construction** (after standardisation \(\tilde{v}_{1,i}, \tilde{v}_{2,i}\)):
 
@@ -140,9 +140,9 @@ D = \frac{\sum_i w_i \Delta p_i}{\mathrm{denom}}
 
 **Interpretive limits:**
 
-- μ is a **mathematical direction** in the model's (possibly standardised) Δt–Δp plane — **not** a psychological label of "melodic direction."
+- μ is an **undirected axis** in the model's (possibly standardised) Δt–Δp plane — **not** a psychological label of "melodic direction." The stored number is one representative; μ and μ+π are the same axis.
 - μ depends on **time axis** (`ql` vs `sec`), **standardization_mode**, and the **mix of Δt and Δp** in the window.
-- Eigenvector sign is arbitrary; \(\mathbf{v}\) and \(-\mathbf{v}\) denote the same axis.
+- Eigenvector sign is arbitrary; \(\mathbf{v}\) and \(-\mathbf{v}\) denote the same axis. The 2A mean and directional conflict therefore use the doubled angle \(2\mu\) (Mardia & Jupp, 2000), not a circular mean of μ itself.
 
 **R uses a different angle:** per-transition \(\theta_i = \mathrm{atan2}(\Delta p_i, \Delta t_i^\star)\) on **non-standardised** values (§6).
 
@@ -186,7 +186,7 @@ Otherwise \(A_{\mathrm{tensor}} = \mathrm{NaN}\).
 - Acoustic anisotropy, radiation pattern, or physical directivity.
 - Orchestral density or timbral "brightness."
 
-Standardisation (`local_zscore`, `robust_scale`, or `none`) is applied to \((\Delta t, \Delta p)\) **before** forming \(\mathbf{J}\), so \(A_{\mathrm{tensor}}\) reflects **shape** of the cloud more than absolute semitone or beat scales (when standardisation is active).
+Standardisation is applied to \((\Delta t, \Delta p)\) **before** forming \(\mathbf{J}\). The default, `rms_scale`, divides each component by its weighted root mean square and does **not** subtract the mean, so \(\mathbf{J}\) stays an uncentred structure tensor (Bigün & Granlund, 1987). `local_zscore` and `robust_scale` centre first, which turns \(\mathbf{J}\) into a covariance and changes the construct: a regular chromatic scale becomes degenerate (\(A_{\mathrm{tensor}}=\mathrm{NaN}\)). `none` leaves the raw increments. When a scaling mode is active, \(A_{\mathrm{tensor}}\) reflects orientation after the time and pitch axes have been put on a common scale, not the absolute semitone or beat magnitudes. Analyses from versions ≤ 2.4.0 match `standardization_mode="local_zscore"`.
 
 ---
 
@@ -212,11 +212,11 @@ Missing or non-finite `mu` / `A_tensor` propagate as NaN or 0 per export logic.
 
 `compute_directional_conflict(metrics_by_part)` compares **per-part principal directions μ** within one window.
 
-For parts \(j\) with finite `mu` and positive `weight_sum` \(W_j\):
+For parts \(j\) with finite `mu` and positive `weight_sum` \(W_j\). μ is an **axis** (μ and μ+π are the same orientation), so the resultant doubles the angle (Mardia & Jupp, 2000):
 
 \[
-C_{\mathrm{inst}} = \frac{\sum_j W_j \cos\mu^{(j)}}{\sum_j W_j}, \quad
-S_{\mathrm{inst}} = \frac{\sum_j W_j \sin\mu^{(j)}}{\sum_j W_j}
+C_{\mathrm{inst}} = \frac{\sum_j W_j \cos 2\mu^{(j)}}{\sum_j W_j}, \quad
+S_{\mathrm{inst}} = \frac{\sum_j W_j \sin 2\mu^{(j)}}{\sum_j W_j}
 \]
 
 \[
@@ -226,8 +226,8 @@ R_{\mathrm{inst}} = \sqrt{C_{\mathrm{inst}}^2 + S_{\mathrm{inst}}^2}, \quad
 
 | Outcome | Meaning |
 |---------|---------|
-| **Low conflict** (→ 0) | Part-level μ values are **aligned** (similar directional tendency in the tensor sense). |
-| **High conflict** (→ 1) | μ values **oppose or cancel** (stratified motion in different directions). |
+| **Low conflict** (→ 0) | Part-level axes are **aligned**, including a sign flip (μ and μ+π). |
+| **High conflict** (→ 1) | Axes are **perpendicular** or dispersed on the doubled circle. |
 | **NaN** | No valid parts, or \(\sum W_j \leq 0\). |
 
 **Not:** contrapuntal dissonance, harmonic tension, textural density, or perceptual "conflict." Requires **≥ 2 parts** with valid metrics for meaningful comparison (single-part windows yield NaN in the pipeline).
@@ -298,7 +298,7 @@ CI bounds are **2.5% and 97.5% percentiles** of the bootstrap distribution.
 1. **Consistent upward melody** (many positive Δp, similar θ): **high R**, often **high \(A_{\mathrm{tensor}}\)**, **D > 0**, **τ ≈ 0**.
 2. **Alternating up and down** with similar step sizes: **τ high**, **D ≈ 0**; **R** may be **low** even if transitions are frequent.
 3. **Two parts, same μ**: **low directional conflict**; does not require identical melodic contours.
-4. **Two parts, μ differing by ~π**: **high directional conflict** (opposed directional tendencies in the model).
+4. **Two parts, μ differing by ~π/2**: **high directional conflict**. A difference of ~π is the **same axis** (eigenvector sign) and gives **low** conflict.
 5. **Many events, opposing directions**: not necessarily anisotropic — **\(A_{\mathrm{tensor}}\)** and **R** can stay low if vectors cancel.
 6. **Few but parallel transitions** (e.g. steady ascent): can show **high R** and **high \(A_{\mathrm{tensor}}\)** with small \(n\) — check bootstrap CI / \(n\).
 7. **Clarinet part in written pitch vs sounding**: same score can change **Δp**, **μ**, and conflict when transposition is normalised.

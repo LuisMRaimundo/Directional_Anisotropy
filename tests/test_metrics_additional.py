@@ -297,8 +297,32 @@ def test_directional_conflict_aligned_directions_low_conflict():
     assert out == pytest.approx(0.0)
 
 
-def test_directional_conflict_opposed_directions_high_conflict():
+def test_directional_conflict_sign_flip_is_the_same_axis():
+    """μ and μ+π are one axis, so a sign flip is not opposition."""
     m1 = Metrics(D=0, tau=0, A_tensor=0.5, mu=0.0, R=0.9, n=3, weight_sum=2.0)
     m2 = Metrics(D=0, tau=0, A_tensor=0.5, mu=math.pi, R=0.9, n=3, weight_sum=2.0)
     out = compute_directional_conflict({"a": m1, "b": m2})
-    assert out == pytest.approx(1.0)
+    assert out == pytest.approx(0.0, abs=1e-9)
+
+
+def test_a_sign_flipped_axes_have_zero_conflict():
+    m1 = Metrics(D=0, tau=0, A_tensor=0.8, mu=0.3, R=0.9, n=4, weight_sum=2.0)
+    m2 = Metrics(D=0, tau=0, A_tensor=0.8, mu=0.3 + math.pi, R=0.9, n=4, weight_sum=3.0)
+    out = compute_directional_conflict({"a": m1, "b": m2})
+    assert out == pytest.approx(0.0, abs=1e-9)
+
+
+def test_b_perpendicular_axes_equal_weight_conflict_one():
+    m1 = Metrics(D=0, tau=0, A_tensor=0.8, mu=0.0, R=0.9, n=4, weight_sum=2.0)
+    m2 = Metrics(D=0, tau=0, A_tensor=0.8, mu=math.pi / 2, R=0.9, n=4, weight_sum=2.0)
+    out = compute_directional_conflict({"a": m1, "b": m2})
+    assert out == pytest.approx(1.0, abs=1e-9)
+
+
+def test_c_axial_mean_of_sign_flip_matches_mod_pi():
+    m1 = Metrics(D=0.1, tau=0.2, A_tensor=0.5, mu=0.3, R=0.4, n=3, weight_sum=1.5)
+    m2 = Metrics(D=0.2, tau=0.1, A_tensor=0.6, mu=0.3 + math.pi, R=0.5, n=3, weight_sum=2.5)
+    agg = _compute_weighted_aggregate([m1, m2])
+    delta = (agg.mu - 0.3) % math.pi
+    delta = min(delta, math.pi - delta)
+    assert delta == pytest.approx(0.0, abs=1e-9)

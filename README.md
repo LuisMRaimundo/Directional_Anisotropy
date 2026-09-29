@@ -7,12 +7,12 @@ Directional_Anisotropy measures **notational directionality** in pitch–time tr
 
 **It is not:** audio analysis, a perception model, harmonic or Schenkerian analysis, orchestration density, or general texture analysis. The structure-tensor analogy applies to **discrete notational data**, not waveforms or images.
 
-**Package version:** 2.4.0 (`anisotropia`; canonical tool name **Directional_Anisotropy**)  
+**Package version:** 2.5.0 (`anisotropia`; canonical tool name **Directional_Anisotropy**)  
 **Python:** ≥ 3.10
 
 **Estrutura:** `anisotropia/` (parsing, metrics, transitions, **pipeline**, sensitivity) + `Anisotropia.py` (Streamlit UI).
 
-**CI:** GitHub Actions — tests (**254**), coverage ≥78% (~**93%**), frozen corpus comparison, **ruff** (blocking) — see `.github/workflows/tests.yml`.
+**CI:** GitHub Actions — tests (**267**), coverage ≥78% (~**93%**), frozen corpus comparison, **ruff** (blocking) — see `.github/workflows/tests.yml`.
 
 > **📘 [MANUAL_TECNICO.md](MANUAL_TECNICO.md)** — Fórmulas e algoritmos  
 > **📖 [MANUAL_METRICAS.md](MANUAL_METRICAS.md)** — Resumo das métricas  
@@ -72,6 +72,7 @@ python corpus/scripts/reproduce_tables.py
 - Pitch spelling / enharmonic semantics are limited (MIDI semitones).
 - Chord representative collapses simultaneities for horizontal directionality.
 - \(D\) is signed pitch drift, not tonal function.
+- Default tensor standardisation is **`rms_scale`**: each of \(\Delta t\) and \(\Delta p\) is divided by its weighted root mean square, with no mean subtraction. `local_zscore` (centring and division by \(\sigma\)), `robust_scale`, `none`, and `global_zscore` remain available. Results from versions ≤ 2.4.0 are reproducible only with `standardization_mode="local_zscore"`.
 - `global_zscore` is currently an **alias** of `local_zscore` (not corpus-global).
 - `grace_policy=include_attached` is **not implemented** (not in UI; programmatic use raises `NotImplementedError`).
 - **`config_sha256`** is computed for every analysis (deterministic effective-config hash).
@@ -88,9 +89,9 @@ Symbolic **notational** descriptors only — not audio, spectral, or perceptual 
 | **D** | Drift (weighted signed pitch change) |
 | **τ** | Tortuosity |
 | **$A_{\mathrm{tensor}}$** | Tensor anisotropy in \((\Delta t, \Delta p)\) — not acoustic anisotropy |
-| **μ** | Principal orientation (radians) in the model's Δt–Δp plane |
+| **μ** | Principal axis (radians) in the model's Δt–Δp plane; μ and μ+π are the same axis |
 | **R** | Angular coherence (directional concentration, not movement amount) |
-| **Directional conflict** | Misalignment of per-part μ (\(1 - R_{\mathrm{inst}}\)) — not harmonic dissonance |
+| **Directional conflict** | Axial misalignment of per-part μ (\(1 - R_{\mathrm{inst}}\) on \(2\mu\)) — not harmonic dissonance |
 
 ## Legal and citation
 

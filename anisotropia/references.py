@@ -84,7 +84,7 @@ REFERENCES: tuple[Reference, ...] = (
             "Mardia, K. V., & Jupp, P. E. (2000). *Directional Statistics*. "
             "Wiley."
         ),
-        usage_pt="R, média circular de μ (2A), conflito direccional.",
+        usage_pt="R; média axial de μ por duplicação do ângulo (2A); conflito direccional.",
     ),
     Reference(
         label_en="Bootstrap confidence intervals",
