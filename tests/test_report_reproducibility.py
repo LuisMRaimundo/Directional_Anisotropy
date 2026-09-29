@@ -22,7 +22,7 @@ def test_report_contains_reproducibility_and_scope():
     text = generate_report("minimal.xml", df, params, 1, 1, 3, summary_counts=result.summary_counts)
     assert "notational" in text.lower() or "Notational" in text
     assert "not audio" in text.lower() or "not** audio" in text.lower()
-    assert "metric_schema_version" in text or "1.0.0" in text
+    assert "metric_schema_version" in text or "1.1.0" in text
     assert "horizontal" in text.lower()
     assert "not harmonic" in text.lower() or "not audio" in text.lower()
 

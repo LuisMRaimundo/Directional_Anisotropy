@@ -1,7 +1,7 @@
 # Manual Técnico — Directional_Anisotropy
 
-**Versão:** 2.4.0  
-**Data:** Maio 2026  
+**Versão:** 2.5.0  
+**Data:** Setembro 2026  
 **Âmbito:** Fórmulas, algoritmos e convenções **exactamente** como implementados em `anisotropia/` (Python 3.10+), mais tutorial operacional. **Este é o único manual técnico do projecto.**
 
 **Ficheiros de referência:** `anisotropia/pipeline.py`, `metrics.py`, `parsing.py`, `transitions.py`, `windowing.py`, `config.py`, `reproducibility.py`, `analysis_warnings.py`, `visualizations.py`, `report.py`, `excel_export.py`, `Anisotropia.py`.
@@ -63,7 +63,7 @@ O sistema mede **Directional_Anisotropy** (campo direccional notacional sistemá
 ### 1.3 Distinção crítica (implementação)
 
 - **\(D\)** e **\(\tau\)** usam apenas \(\Delta p_i\) e pesos \(w_i\) (não usam o tensor).  
-- **\(\mathbf{J}\)**, **\(A_{\mathrm{tensor}}\)** e **\(\mu_{\mathrm{axis}}\)** usam o par \((v_{1,i}, v_{2,i})\) onde, conforme `standardization_mode` (ver §4), \(v_1, v_2\) são **\(\Delta t\)** e **\(\Delta p\)** *transformados* (z-score local, robusto, ou nenhum).  
+- **\(\mathbf{J}\)**, **\(A_{\mathrm{tensor}}\)** e **\(\mu_{\mathrm{axis}}\)** usam o par \((v_{1,i}, v_{2,i})\) onde, conforme `standardization_mode` (ver §4), \(v_1, v_2\) são **\(\Delta t\)** e **\(\Delta p\)** *transformados* (predefinição `rms_scale`, sem centragem; ou z-score local, robusto, ou nenhum).  
 - **\(R\)** e os ângulos \(\theta_i\) usam **sempre** os valores **originais** (não padronizados):
   $$
   \theta_i = \operatorname{atan2}(\Delta p_i,\, \Delta t_i^{\star})
@@ -187,6 +187,7 @@ O parâmetro **`standardization_mode`** (string ou bool legacy) controla a trans
 
 | Modo | Comportamento |
 |------|----------------|
+| `rms_scale` | **Predefinição** (v2.5.0). Divisão pela raiz quadrada da média quadrática ponderada, **sem** subtracção da média (§4.2). |
 | `local_zscore` | Centragem e divisão por \(\sigma\) **ponderados** na janela (equivalente ao antigo `standardize=True`). |
 | `none` | Sem transformação: \(\tilde{v}_{k,i} = v_{k,i}\). |
 | `robust_scale` | Centragem por **mediana ponderada** e escala tipo MAD (\(\times 1.4826\)) por eixo (Rousseeuw & Croux, 1993; ver §14). |
@@ -194,7 +195,7 @@ O parâmetro **`standardization_mode`** (string ou bool legacy) controla a trans
 
 **TODO (futuro):** implementar `global_zscore` verdadeiro com estatísticas fixas por corpus/perfil de benchmark, versionadas em `metric_schema_version`.
 
-Se for passado um **bool**: `True` → `local_zscore`; `False` → `none`.
+Se for passado um **bool** à função de métricas: `True` → `local_zscore`; `False` → `none`. A predefinição de `AnalysisConfig.standardization_mode` é `rms_scale`, não o bool `True`.
 
 ### 4.1 Médias e variâncias ponderadas (modo `local_zscore`)
 
@@ -215,13 +216,26 @@ $$
 \tilde{v}_{2,i} = \frac{v_{2,i} - \bar{v}_2}{\max(\sigma_2,\varepsilon)}
 $$
 
-### 4.2 Tensor
+### 4.2 Escala RMS sem centragem (modo `rms_scale`, predefinição)
+
+O modo predefinido **não subtrai a média**. Cada componente é dividida pela raiz quadrada da média quadrática ponderada:
+
+$$
+s_k = \sqrt{\frac{\sum_i w_i v_{k,i}^{2}}{\sum_i w_i}}, \qquad
+v_k \leftarrow \frac{v_k}{s_k}
+$$
+
+para \(k \in \{1,2\}\) (\(v_1 = \Delta t\), \(v_2 = \Delta p\)). Na implementação, o denominador é \(\max(s_k, \varepsilon)\) com \(\varepsilon = 10^{-9}\). Não há centragem: a média ponderada **não** é subtraída.
+
+**Fundamento.** O tensor de estrutura não centrado corresponde ao uso canónico em análise de orientação (Bigün & Granlund, 1987). A centragem transforma \(\mathbf{J}\) numa matriz de covariância e muda o construto medido. Com `local_zscore`, uma escala cromática regular degenera (\(A_{\mathrm{tensor}} = \mathrm{NaN}\)) e uma figura alternada de notas vizinhas \(\pm 1\) dá \(A_{\mathrm{tensor}} = 1\). `rms_scale` neutraliza a diferença de escala entre os eixos tempo e altura sem esse deslocamento.
+
+### 4.3 Tensor
 
 $$
 \mathbf{J} = \sum_i w_i \begin{bmatrix} \tilde{v}_{1,i}^2 & \tilde{v}_{1,i}\tilde{v}_{2,i} \\ \tilde{v}_{1,i}\tilde{v}_{2,i} & \tilde{v}_{2,i}^2 \end{bmatrix}
 $$
 
-### 4.3 Autovalores e vector próprio principal
+### 4.4 Autovalores e vector próprio principal
 
 `numpy.linalg.eigh(J)` devolve autovalores em **ordem crescente**: \(\lambda_{\mathrm{small}} \leq \lambda_{\mathrm{large}}\). O código define:
 
@@ -239,7 +253,7 @@ O código exporta também \(\cos\mu_{\mathrm{axis}}\), \(\sin\mu_{\mathrm{axis}}
 
 O campo `Metrics.mu` coincide com \(\mu_{\mathrm{axis}}\) para compatibilidade com gráficos existentes.
 
-### 4.4 Anisotropia do tensor
+### 4.5 Anisotropia do tensor
 
 Se \(\lambda_1 + \lambda_2 > 0\):
 
@@ -318,12 +332,12 @@ $$
 
 onde \(W_j = \mathrm{weight\_sum}^{(j)}\) (soma dos pesos das transições na janela).
 
-Para **\(\mu_{\mathrm{axis}}^{(j)}\)** (orientação do eixo principal por instrumento na janela) — média **circular** entre instrumentos:
+Para **\(\mu_{\mathrm{axis}}^{(j)}\)** (orientação do eixo principal por instrumento na janela). \(\mu\) é um **eixo**: \(\mu\) e \(\mu+\pi\) representam a mesma orientação, porque o sinal do autovector é arbitrário. A média entre instrumentos é por isso **axial**, com duplicação do ângulo (Mardia & Jupp, 2000):
 
 $$
-C_\mu = \frac{\sum_j W_j \cos\mu^{(j)}}{\sum_j W_j}, \quad
-S_\mu = \frac{\sum_j W_j \sin\mu^{(j)}}{\sum_j W_j}, \quad
-\bar{\mu} = \operatorname{atan2}(S_\mu, C_\mu)
+C_\mu = \frac{\sum_j W_j \cos(2\mu^{(j)})}{\sum_j W_j}, \quad
+S_\mu = \frac{\sum_j W_j \sin(2\mu^{(j)})}{\sum_j W_j}, \quad
+\bar{\mu} = \frac{1}{2}\operatorname{atan2}(S_\mu, C_\mu)
 $$
 
 ### 7.2 2B — Pool global
@@ -338,9 +352,11 @@ Concatenam-se verticalmente os DataFrames de transições de todas as partes e a
 
 Para uma janela \(w\), com instrumentos \(j\) com \(\mu^{(j)}\) e pesos \(W_j = \mathrm{weight\_sum}^{(j)}\) finitos:
 
+Como em §7.1, \(\mu\) é um eixo (\(\mu\) e \(\mu+\pi\) são a mesma orientação). A resultante é axial, com duplicação do ângulo (Mardia & Jupp, 2000):
+
 $$
-C_{\mathrm{inst}} = \frac{\sum_j W_j \cos\mu^{(j)}}{\sum_j W_j}, \quad
-S_{\mathrm{inst}} = \frac{\sum_j W_j \sin\mu^{(j)}}{\sum_j W_j}
+C_{\mathrm{inst}} = \frac{\sum_j W_j \cos(2\mu^{(j)})}{\sum_j W_j}, \quad
+S_{\mathrm{inst}} = \frac{\sum_j W_j \sin(2\mu^{(j)})}{\sum_j W_j}
 $$
 
 $$
@@ -348,7 +364,7 @@ R_{\mathrm{inst}} = \sqrt{C_{\mathrm{inst}}^2 + S_{\mathrm{inst}}^2}, \quad
 \mathrm{Conflito}(w) = 1 - R_{\mathrm{inst}}
 $$
 
-Interpretação: \(\mathrm{Conflito} \approx 0\) — orientações \(\mu\) alinhadas; \(\approx 1\) — \(\mu\) em direcções opostas ou muito dispersas.
+Interpretação: \(\mathrm{Conflito} \approx 0\) — eixos alinhados, incluindo o caso em que dois autovectores têm sinais opostos (\(\mu\) e \(\mu+\pi\)); \(\approx 1\) — eixos perpendiculares ou muito dispersos no círculo duplicado. Um desvio de \(\pi\) não é oposição.
 
 ---
 
@@ -433,7 +449,7 @@ Retornar DataFrames e contagens (n_horizontal_main, n_vertical, …)
 
 ```
 ENTRADA: df, time_axis ∈ {"ql","sec"}, weight_mode ∈ {"dur","min"},
-         standardize ∈ {bool, "local_zscore", "none", "robust_scale", "global_zscore"}
+         standardize ∈ {bool, "rms_scale", "local_zscore", "none", "robust_scale", "global_zscore"}
 SAÍDA: Metrics
 
 1. Filtrar dp, dt_col finitos; manter apenas dt_col > 0.
@@ -545,10 +561,12 @@ for label, _ in windows[:3]:
     df_w = trans[ref]  # na app: alinhar cortes por medida/tempo/evento como em Anisotropia.py
     m = compute_metrics_from_transitions(
         df_w, time_axis=time_axis, weight_mode="dur",
-        standardize="local_zscore", bootstrap_ci=len(df_w) >= 8,
+        standardize="rms_scale", bootstrap_ci=len(df_w) >= 8,
     )
     print(label, m.A_tensor, m.R, m.n)
 ```
+
+`rms_scale` é a predefinição desde a v2.5.0. Análises anteriores reproduzem-se com `standardize="local_zscore"` (o bool `True` continua a significar esse modo).
 
 Para relatórios Markdown use **`generate_report`** (não `build_report`):
 
@@ -666,7 +684,7 @@ Lista canónica (sincronizada com o relatório gerado e `anisotropia/references.
 6. **Razão de anisotropia (valores próprios)** — Woodcock, N. H. (1977). Specification of fabric shapes using an eigenvalue method. *GSA Bulletin*, 88(8), 1231–1236.  
    *Uso:* analogia para \((\lambda_1-\lambda_2)/(\lambda_1+\lambda_2)\).
 7. **Estatística direccional / resultante circular** — Mardia, K. V., & Jupp, P. E. (2000). *Directional Statistics*. Wiley.  
-   *Uso:* \(R\), média circular de μ (2A), conflito direccional.
+   *Uso:* \(R\); média axial de μ por duplicação do ângulo (2A); conflito direccional.
 8. **Intervalos de confiança (bootstrap)** — Efron, B., & Tibshirani, R. J. (1993). *An Introduction to the Bootstrap*. Chapman & Hall.  
    *Uso:* IC 95% por percentis (B=1000, semente 42).
 9. **DTI (visualização de elipses)** — Basser, P. J., Mattiello, J., & LeBihan, D. (1994). Estimation of the effective self-diffusion tensor from the NMR spin echo. *J. Magn. Reson.*, 103(3), 247–254.  

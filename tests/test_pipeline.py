@@ -45,7 +45,7 @@ def test_run_analysis_minimal_score():
     assert m.A_tensor > 0.9
     assert m.R > 0.5
     assert "input_sha256" in result.reproducibility
-    assert result.reproducibility["metric_schema_version"] == "1.0.0"
+    assert result.reproducibility["metric_schema_version"] == "1.1.0"
 
 
 def test_run_analysis_matches_frozen_reference():

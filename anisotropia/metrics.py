@@ -57,7 +57,13 @@ def _standardize_dt_dp(
     wsum: float,
     mode: str,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Return scaled (v1, v2) for structure tensor. mode: local_zscore | none | robust_scale | global_zscore."""
+    """Return scaled (v1, v2) for the structure tensor.
+
+    Modes: ``rms_scale`` | ``local_zscore`` | ``none`` | ``robust_scale`` | ``global_zscore``.
+    ``rms_scale`` divides each component by its weighted root mean square and does not
+    subtract the mean. ``global_zscore`` is an alias of ``local_zscore``. Unknown modes
+    fall back to ``local_zscore`` (centring and division by the weighted standard deviation).
+    """
     if mode == "none":
         return v1, v2
     if mode == "global_zscore":
@@ -70,6 +76,10 @@ def _standardize_dt_dp(
         v1_std = max(v1_std, EPSILON)
         v2_std = max(v2_std, EPSILON)
         return (v1 - v1_mean) / v1_std, (v2 - v2_mean) / v2_std
+    if mode == "rms_scale":
+        s1 = max(np.sqrt(np.sum(w * v1**2) / wsum), EPSILON)
+        s2 = max(np.sqrt(np.sum(w * v2**2) / wsum), EPSILON)
+        return v1 / s1, v2 / s2
     if mode == "robust_scale":
         m1 = _weighted_median(v1, w)
         m2 = _weighted_median(v2, w)
@@ -90,7 +100,11 @@ def _compute_tensor_and_R_internal(
 ) -> Tuple[float, float, float, float, float, float, float, float]:
     """
     Returns (A_tensor, mu_axis, R, lambda1, lambda2, cos_mu, sin_mu, mu_doubled_angle).
-    ``standardize`` may be bool (True -> local_zscore) or a mode string.
+
+    ``standardize`` may be bool (``True`` -> ``local_zscore``, ``False`` -> ``none``) or a
+    mode string: ``rms_scale`` | ``local_zscore`` | ``none`` | ``robust_scale`` | ``global_zscore``.
+    Unknown strings fall back to ``local_zscore``. D and tau are not computed here.
+    R is always computed from the unscaled ``(dt, dp)`` vectors.
     """
     v1 = np.array(dt, dtype=float)
     v2 = np.array(dp, dtype=float)
@@ -98,7 +112,7 @@ def _compute_tensor_and_R_internal(
     if wsum <= 0:
         return np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
     mode: str = "local_zscore" if standardize is True else ("none" if standardize is False else str(standardize))
-    if mode not in ("none", "local_zscore", "robust_scale", "global_zscore"):
+    if mode not in ("none", "local_zscore", "robust_scale", "global_zscore", "rms_scale"):
         mode = "local_zscore"
     v1, v2 = _standardize_dt_dp(v1, v2, w, wsum, mode)
     J11 = np.sum(w * v1 * v1)
@@ -141,7 +155,13 @@ def compute_metrics_from_transitions(
     standardize: bool | str = True,
     bootstrap_ci: bool = False,
 ) -> Metrics:
-    """Métricas a partir de transições. ``standardize``: bool or local_zscore|none|robust_scale|global_zscore."""
+    """Métricas a partir de transições.
+
+    ``standardize``: bool (``True`` -> ``local_zscore``, ``False`` -> ``none``) or
+    ``rms_scale`` | ``local_zscore`` | ``none`` | ``robust_scale`` | ``global_zscore``.
+    D and tau use raw ``Δp`` only. R uses the unscaled step directions, not the
+    vectors passed to the structure tensor.
+    """
     if df.empty:
         return Metrics(D=np.nan, tau=np.nan, A_tensor=np.nan, mu=np.nan, R=np.nan, n=0, weight_sum=0.0)
     dt_col = "dt_ql" if time_axis == "ql" else "dt_sec"
@@ -194,7 +214,12 @@ def compute_metrics_from_transitions(
 
 
 def _compute_weighted_aggregate(parts: List[Metrics]) -> Metrics:
-    """Média ponderada de métricas (núcleo de 2A)."""
+    """Média ponderada de métricas (núcleo de 2A).
+
+    Os escalares usam média aritmética ponderada. μ é um eixo (μ e μ+π são a
+    mesma orientação), por isso a média é axial (duplicação do ângulo; Mardia
+    & Jupp, 2000): C e S calculam-se em 2μ e μ̄ = ½ atan2(S, C).
+    """
     parts = [m for m in parts if m.n > 0 and np.isfinite(m.weight_sum)]
     if not parts:
         return Metrics(D=np.nan, tau=np.nan, A_tensor=np.nan, mu=np.nan, R=np.nan, n=0, weight_sum=0.0)
@@ -213,9 +238,11 @@ def _compute_weighted_aggregate(parts: List[Metrics]) -> Metrics:
     mu_vals = np.array([m.mu for m in parts], dtype=float)
     ok_mu = np.isfinite(mu_vals)
     if np.any(ok_mu):
-        C = np.sum(W[ok_mu] * np.cos(mu_vals[ok_mu])) / np.sum(W[ok_mu])
-        S = np.sum(W[ok_mu] * np.sin(mu_vals[ok_mu])) / np.sum(W[ok_mu])
-        mu = float(math.atan2(S, C))
+        doubled = 2.0 * mu_vals[ok_mu]
+        w_mu = W[ok_mu]
+        C = np.sum(w_mu * np.cos(doubled)) / np.sum(w_mu)
+        S = np.sum(w_mu * np.sin(doubled)) / np.sum(w_mu)
+        mu = float(0.5 * math.atan2(S, C))
     else:
         mu = np.nan
     n_tot = int(np.sum([m.n for m in parts]))
@@ -261,11 +288,19 @@ def aggregate_2A(
 
 def compute_directional_conflict(metrics_by_part: Mapping[str, Metrics]) -> float:
     """
-    Directional conflict between instruments in window w.
-    Conflito(w) = 1 - R_inst(w), where R_inst = weighted circular resultant of μ(j,w).
-    High conflict: layers in different directions. Low: coherent global orientation.
+    Directional conflict between instruments in a window.
 
-    Weights W_j,w = weight_sum (sum of transition weights) per instrument.
+    μ is an axis: μ and μ+π are the same orientation. The resultant is axial
+    (angle doubling; Mardia & Jupp, 2000):
+
+        C = Σ W cos(2μ) / Σ W
+        S = Σ W sin(2μ) / Σ W
+        R_inst = sqrt(C² + S²)
+        conflict = 1 − R_inst
+
+    Conflict is 0 when the axes coincide, including opposite eigenvector signs.
+    It is 1 when the doubled angles cancel (perpendicular axes, equal weight).
+    Weights are each part's weight_sum.
     """
     valid = [(k, m) for k, m in metrics_by_part.items()
              if hasattr(m, 'mu') and hasattr(m, 'weight_sum')
@@ -277,8 +312,9 @@ def compute_directional_conflict(metrics_by_part: Mapping[str, Metrics]) -> floa
     W_sum = np.sum(W)
     if W_sum <= 0:
         return np.nan
-    C = np.sum(W * np.cos(mu)) / W_sum
-    S = np.sum(W * np.sin(mu)) / W_sum
+    doubled = 2.0 * mu
+    C = np.sum(W * np.cos(doubled)) / W_sum
+    S = np.sum(W * np.sin(doubled)) / W_sum
     R_inst = float(np.sqrt(C * C + S * S))
     return float(1.0 - R_inst)
 

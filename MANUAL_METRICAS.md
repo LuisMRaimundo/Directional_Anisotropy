@@ -26,8 +26,9 @@ Os conceitos de anisotropia e tensores provêm de domínios com grandezas físic
 
 Para tornar $A_{\mathrm{tensor}}$ **independente das escalas** de $\Delta t$ e $\Delta p$ (que têm unidades diferentes), aplica-se **padronização ponderada** dentro de cada janela:
 
-- Cada componente $(\Delta t,\,\Delta p)$ é centrada na média ponderada e dividida pelo desvio-padrão ponderado.
-- O tensor $\mathbf{J}$ passa a reflectir a **forma** (correlação/direcção) das transições, não a escala absoluta.
+- No modo predefinido `rms_scale`, cada componente $(\Delta t,\,\Delta p)$ é dividida pela raiz quadrada da média quadrática ponderada, **sem** centragem. O tensor $\mathbf{J}$ permanece um tensor de estrutura não centrado (ver `MANUAL_TECNICO.md` §4.2).
+- A centragem na média ponderada seguida de divisão pelo desvio-padrão ponderado pertence ao modo `local_zscore` (disponível, mas já não é a predefinição). Nesse modo $\mathbf{J}$ é uma matriz de covariância.
+- Com `rms_scale`, $\mathbf{J}$ reflecte a orientação das transições em torno da origem, depois de neutralizar a diferença de escala entre tempo e altura — não a escala absoluta.
 - Isto torna as métricas comparáveis entre excertos com durações e amplitudes melódicas diferentes.
 - O modo `global_zscore` na interface é actualmente **alias** de `local_zscore` por janela (não normalização global ao corpus). Ver `MANUAL_TECNICO.md` §4.
 
@@ -179,7 +180,7 @@ $$
 
 ### 2A — Média ponderada por instrumento
 
-Calcula-se cada métrica por instrumento e faz-se a **média ponderada** entre instrumentos, usando o peso total (W) de cada um. Dá mais importância a instrumentos com mais transições.
+Calcula-se cada métrica por instrumento e faz-se a **média ponderada** entre instrumentos, usando o peso total (W) de cada um. Dá mais importância a instrumentos com mais transições. Para $\mu$, que é um eixo ($\mu$ e $\mu+\pi$ são a mesma orientação), a média é **axial**: $C$ e $S$ usam $2\mu$ e $\bar\mu = \tfrac{1}{2}\operatorname{atan2}(S, C)$ (Mardia & Jupp, 2000; ver `MANUAL_TECNICO.md` §7.1).
 
 **Uso**: Ver o perfil médio da orquestra/ensemble.
 
@@ -204,7 +205,8 @@ O indicador visual de **Anisotropia / Isotropia** na aplicação usa directament
 
 ## 5. Referências técnicas
 
-- **Modo científico**: Padronização $(\Delta t,\,\Delta p)$ + bootstrap IC 95% quando $n \geq 8$. Recomendado para rigor.
+- **Padronização do tensor**: predefinição `rms_scale` (raiz quadrada da média quadrática ponderada, sem centragem). `local_zscore` centra e divide por $\sigma$. Independente do modo científico.
+- **Modo científico**: intervalos de confiança bootstrap a 95% quando $n \geq 8$. Recomendado para rigor.
 - **n estável**: Janelas com $n \geq 15$ transições dão estimativas mais estáveis.
 - **Pesos**: Cada transição é ponderada pela duração do evento de origem (modo `dur`) ou por $\min(\text{duração},\,\Delta t^{\mathrm{ql}})$ (modo `min`).
 - **Janelas**: A análise pode ser feita por:
@@ -233,7 +235,7 @@ $$
 $$
 \mathrm{Conflito}(w) = 1 - R_{\mathrm{inst}}(w)
 $$
-onde $R_{\mathrm{inst}}$ é a resultante circular ponderada das orientações $\mu^{(j,w)}$. Peso $W_{j,w} =$ soma dos pesos das transições do instrumento $j$ na janela $w$. Alto conflito: camadas em direcções diferentes; baixo: orientação global coerente.
+onde $R_{\mathrm{inst}}$ é a resultante **axial** ponderada das orientações $\mu^{(j,w)}$: $C$ e $S$ calculam-se em $2\mu$, não em $\mu$. Peso $W_{j,w} =$ soma dos pesos das transições do instrumento $j$ na janela $w$. Conflito baixo: eixos alinhados, incluindo sinais opostos do autovector ($\mu$ e $\mu+\pi$). Conflito alto: eixos perpendiculares (diferença $\pi/2$) ou dispersos no círculo duplicado.
 
 **Não confundir com:** dissonância contrapontística, tensão harmónica, densidade textural ou tensão perceptiva — mede apenas o alinhamento de $\mu$ entre partes (ver [docs/METRIC_SEMANTICS.md §9](docs/METRIC_SEMANTICS.md#9-directional-conflict)).
 
@@ -253,6 +255,6 @@ $\theta_i = \operatorname{arctan2}(\Delta p_i,\,\Delta t_i)$ em coordenadas pola
 - **Escala robusta (MAD)**: Rousseeuw, P. J., & Croux, C. (1993). Alternatives to the median absolute deviation. *JASA*, 88(424), 1273–1283. — Modo `robust_scale` (mediana ponderada e MAD × 1,4826).
 - **Tensor de estrutura / anisotropia**: Bigün, J., & Granlund, G. H. (1987). Optimal orientation detection of linear symmetry. *ICCV*, pp. 433–438. — Tensor **J**, eixo μ, anisotropia \(A_{\mathrm{tensor}}\).
 - **Razão de anisotropia (valores próprios)**: Woodcock, N. H. (1977). Specification of fabric shapes using an eigenvalue method. *GSA Bulletin*, 88(8), 1231–1236. — Analogia para \((\lambda_1-\lambda_2)/(\lambda_1+\lambda_2)\).
-- **Estatística direccional / resultante circular**: Mardia, K. V., & Jupp, P. E. (2000). *Directional Statistics*. Wiley. — \(R\), média circular de μ (2A), conflito direccional.
+- **Estatística direccional / resultante circular**: Mardia, K. V., & Jupp, P. E. (2000). *Directional Statistics*. Wiley. — \(R\); média axial de μ por duplicação do ângulo (2A); conflito direccional.
 - **Intervalos de confiança (bootstrap)**: Efron, B., & Tibshirani, R. J. (1993). *An Introduction to the Bootstrap*. Chapman & Hall. — IC 95% por percentis (B=1000, semente 42).
 - **DTI (visualização de elipses)**: Basser, P. J., Mattiello, J., & LeBihan, D. (1994). Estimation of the effective self-diffusion tensor from the NMR spin echo. *J. Magn. Reson.*, 103(3), 247–254. — Analogia visual para elipses a partir de λ₁, λ₂.

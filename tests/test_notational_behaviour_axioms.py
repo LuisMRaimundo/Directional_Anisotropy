@@ -158,8 +158,9 @@ def test_2B_can_differ_from_2A():
 
 
 def test_conflict_high_for_opposing_mu():
+    """Axial opposition is a quarter-turn. A shift of π is the same axis."""
     m1 = Metrics(D=0, tau=0, A_tensor=0.8, mu=0.0, R=0.8, n=5, weight_sum=5.0)
-    m2 = Metrics(D=0, tau=0, A_tensor=0.8, mu=np.pi, R=0.8, n=5, weight_sum=5.0)
+    m2 = Metrics(D=0, tau=0, A_tensor=0.8, mu=np.pi / 2, R=0.8, n=5, weight_sum=5.0)
     c = compute_directional_conflict({"a": m1, "b": m2})
     assert c > 0.5
 

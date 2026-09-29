@@ -156,9 +156,10 @@ with st.sidebar:
     st.header("Robustez científica (anisotropia notacional)")
     standardization_mode = st.selectbox(
         "Padronização do tensor (Δt, Δp)",
-        ["local_zscore", "none", "robust_scale", "global_zscore"],
+        ["rms_scale", "local_zscore", "none", "robust_scale", "global_zscore"],
         index=0,
-        help="**local_zscore**: média/peso e σ por janela (predefinição). **none**: bruto. **robust_scale**: mediana/MAD. "
+        help="rms_scale: division by the weighted root mean square, without mean subtraction (default). "
+        "**local_zscore**: média/peso e σ por janela. **none**: bruto. **robust_scale**: mediana/MAD. "
         "**global_zscore**: actualmente alias de local (pool global reservado).",
     )
     scientific_mode = st.checkbox(

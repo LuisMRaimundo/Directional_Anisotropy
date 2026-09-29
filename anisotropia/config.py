@@ -8,7 +8,7 @@ from typing import Any, Dict, Literal
 WindowMode = Literal["measures", "seconds", "events", "total"]
 ChordRep = Literal["centroid", "top", "bottom"]
 GracePolicy = Literal["exclude", "include"]
-StandardizationMode = Literal["local_zscore", "none", "robust_scale", "global_zscore"]
+StandardizationMode = Literal["rms_scale", "local_zscore", "none", "robust_scale", "global_zscore"]
 WeightMode = Literal["dur", "min"]
 TimeAxis = Literal["ql", "sec"]
 PitchSpace = Literal["sounding", "written"]
@@ -37,8 +37,12 @@ class AnalysisConfig:
     """
     Parameters for symbolic pitch-time transition analysis.
 
-    ``global_zscore`` is documented as an alias of ``local_zscore`` per window
-    (true corpus-global normalization is not implemented in this release).
+    ``rms_scale`` (default) divides each of ``Δt`` and ``Δp`` by its weighted root
+    mean square and does not subtract the mean. ``local_zscore`` still centres and
+    divides by the weighted standard deviation. At the metric-function layer,
+    ``standardize=True`` remains ``local_zscore`` and ``standardize=False`` remains
+    ``none``. ``global_zscore`` is documented as an alias of ``local_zscore`` per
+    window (true corpus-global normalization is not implemented in this release).
     """
 
     chord_rep: ChordRep = "centroid"
@@ -46,7 +50,7 @@ class AnalysisConfig:
     window_mode: WindowMode = "total"
     window_size: float = 4.0
     step: float = 2.0
-    standardization_mode: StandardizationMode = "local_zscore"
+    standardization_mode: StandardizationMode = "rms_scale"
     bootstrap_ci: bool = True
     grace_policy: GracePolicy = "exclude"
     pitch_space: PitchSpace = "sounding"

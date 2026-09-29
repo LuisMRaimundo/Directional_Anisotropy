@@ -28,11 +28,11 @@ def test_compute_directional_conflict_aligned():
 
 
 def test_compute_directional_conflict_opposite():
-    """When μ differ by π, conflict ≈ 1."""
+    """A difference of π is the same axis, so conflict is 0."""
     m1 = Metrics(D=0, tau=0, A_tensor=0.5, mu=0.0, R=0.8, n=10, weight_sum=1.0)
     m2 = Metrics(D=0, tau=0, A_tensor=0.5, mu=np.pi, R=0.8, n=10, weight_sum=1.0)
     out = compute_directional_conflict({"a": m1, "b": m2})
-    assert np.isfinite(out) and out > 0.9
+    assert np.isfinite(out) and abs(out) < 1e-9
 
 
 def test_compute_directional_conflict_empty():
@@ -49,11 +49,11 @@ def test_compute_directional_conflict_single_part():
 
 
 def test_compute_directional_conflict_orthogonal():
-    """μ at 0° and 90°: R_inst = √2/2 ≈ 0.71, conflict ≈ 0.29 > 0 (some disagreement)."""
+    """Perpendicular axes cancel on the doubled circle: conflict = 1."""
     m1 = Metrics(D=0, tau=0, A_tensor=0.5, mu=0.0, R=0.8, n=10, weight_sum=1.0)
     m2 = Metrics(D=0, tau=0, A_tensor=0.5, mu=np.pi / 2, R=0.8, n=10, weight_sum=1.0)
     out = compute_directional_conflict({"a": m1, "b": m2})
-    assert np.isfinite(out) and out > 0 and out < 1
+    assert np.isfinite(out) and abs(out - 1.0) < 1e-9
 
 
 def test_tensor_ellipse_from_metrics_normalized():
